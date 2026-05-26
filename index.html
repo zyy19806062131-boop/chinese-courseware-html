@@ -3,38 +3,84 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Chinese Courseware</title>
+  <title>Chinese Courseware Library</title>
   <style>
-    :root{--bg:#f7f1e8;--paper:#fffaf2;--ink:#24211f;--muted:#7c7168;--line:rgba(52,40,32,.14);--accent:#b88a4e;}
+    :root{--bg:#f7f1e8;--paper:#fffaf2;--ink:#24211f;--muted:#7c7168;--line:rgba(52,40,32,.14);--accent:#b88a4e;--green:#7f9b82;--rose:#b66b79;--blue:#547b9a;--shadow:0 24px 80px rgba(76,57,38,.13);}
     *{box-sizing:border-box}
-    body{margin:0;min-height:100vh;background:radial-gradient(circle at 12% 20%,#fff,transparent 28%),radial-gradient(circle at 86% 14%,rgba(184,138,78,.22),transparent 24%),var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;display:grid;place-items:center;padding:32px;}
-    main{width:min(920px,100%);}
-    .hero{margin-bottom:28px;}
-    .kicker{font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:800;color:var(--accent);margin-bottom:12px;}
-    h1{font-size:clamp(36px,7vw,72px);margin:0;letter-spacing:-.055em;line-height:1.02;}
-    p{color:var(--muted);line-height:1.8;font-size:16px;max-width:620px;margin:16px 0 0;}
-    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;margin-top:32px;}
-    .card{display:block;padding:26px;border-radius:30px;background:rgba(255,250,242,.72);border:1px solid rgba(255,255,255,.65);box-shadow:0 24px 70px rgba(76,57,38,.13);text-decoration:none;color:inherit;transition:.25s ease;}
-    .card:hover{transform:translateY(-4px);box-shadow:0 30px 90px rgba(76,57,38,.17);}
-    .card b{display:block;font-size:24px;letter-spacing:-.035em;margin-bottom:8px;}
-    .card span{display:block;color:var(--muted);line-height:1.65;font-size:14px;}
-    .tag{display:inline-flex;margin-bottom:18px;padding:8px 12px;border-radius:999px;background:rgba(184,138,78,.12);color:var(--accent);font-weight:800;font-size:12px;}
+    html{scroll-behavior:smooth}
+    body{margin:0;min-height:100vh;background:radial-gradient(circle at 10% 14%,#fff,transparent 28%),radial-gradient(circle at 86% 10%,rgba(184,138,78,.22),transparent 24%),radial-gradient(circle at 76% 82%,rgba(127,155,130,.18),transparent 28%),var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;padding:34px;}
+    main{width:min(1120px,100%);margin:0 auto;}
+    .hero{padding:42px 0 28px;display:grid;grid-template-columns:1.05fr .95fr;gap:34px;align-items:end;}
+    .kicker{font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:850;color:var(--accent);margin-bottom:14px;}
+    h1{font-size:clamp(38px,7vw,76px);margin:0;letter-spacing:-.058em;line-height:1.02;}
+    .hero p{color:var(--muted);line-height:1.85;font-size:16px;max-width:640px;margin:18px 0 0;}
+    .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+    .stat{padding:18px;border-radius:24px;background:rgba(255,250,242,.58);border:1px solid rgba(255,255,255,.65);box-shadow:0 16px 46px rgba(76,57,38,.08);}
+    .stat b{display:block;font-size:26px;letter-spacing:-.04em}.stat span{font-size:13px;color:var(--muted)}
+    .category{margin-top:34px;}
+    .category-head{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;margin-bottom:16px;}
+    h2{font-size:clamp(24px,3vw,38px);margin:0;letter-spacing:-.045em;}
+    .category-head p{margin:6px 0 0;color:var(--muted);line-height:1.65;font-size:14px;}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;}
+    .card{display:block;min-height:190px;padding:24px;border-radius:30px;background:rgba(255,250,242,.72);border:1px solid rgba(255,255,255,.68);box-shadow:var(--shadow);text-decoration:none;color:inherit;transition:.25s ease;position:relative;overflow:hidden;}
+    .card::after{content:"";position:absolute;inset:auto -20% -45% 30%;height:130px;background:radial-gradient(circle,rgba(184,138,78,.22),transparent 68%);pointer-events:none;}
+    .card:hover{transform:translateY(-4px);box-shadow:0 32px 92px rgba(76,57,38,.18);}
+    .tag{display:inline-flex;margin-bottom:18px;padding:8px 12px;border-radius:999px;background:rgba(184,138,78,.12);color:var(--accent);font-weight:850;font-size:12px;}
+    .tag.green{background:rgba(127,155,130,.14);color:var(--green)}.tag.rose{background:rgba(182,107,121,.13);color:var(--rose)}.tag.blue{background:rgba(84,123,154,.13);color:var(--blue)}
+    .card b{display:block;font-size:23px;letter-spacing:-.035em;margin-bottom:9px;line-height:1.25;}
+    .card span.desc{display:block;color:var(--muted);line-height:1.68;font-size:14px;max-width:92%;}
+    .empty{min-height:150px;padding:24px;border-radius:28px;background:rgba(255,255,255,.36);border:1px dashed var(--line);color:var(--muted);line-height:1.7;}
+    footer{padding:46px 0 24px;color:var(--muted);font-size:13px;line-height:1.7;}
+    @media(max-width:820px){body{padding:22px}.hero{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}.category-head{display:block}.grid{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
   <main>
     <section class="hero">
-      <div class="kicker">Chinese Courseware HTML</div>
-      <h1>中文互动课件库</h1>
-      <p>这里保存可以直接在线打开的中文课件。点击下面的课程卡片进入学生端页面。</p>
+      <div>
+        <div class="kicker">Chinese Courseware HTML</div>
+        <h1>中文互动课件库</h1>
+        <p>按课程类型整理你的学生端 HTML 课件。以后新增课件时，只需要放进对应分类，再在首页添加一张课程卡片。</p>
+      </div>
+      <div class="stats">
+        <div class="stat"><b>5</b><span>分类入口</span></div>
+        <div class="stat"><b>1</b><span>已上线课件</span></div>
+        <div class="stat"><b>∞</b><span>可继续扩展</span></div>
+      </div>
     </section>
-    <section class="grid">
-      <a class="card" href="lessons/tamila.html">
-        <span class="tag">HSK3–4 Speaking</span>
-        <b>TAMILA · Speaking Lounge</b>
-        <span>7 Topics Speaking Lounge · 口语主题训练课件。</span>
-      </a>
+
+    <section class="category" id="speaking">
+      <div class="category-head"><div><h2>口语专项</h2><p>主题表达、观点表达、自由谈话、学生定制口语训练。</p></div></div>
+      <div class="grid">
+        <a class="card" href="lessons/speaking/tamila-speaking-lounge.html">
+          <span class="tag">HSK3–4 Speaking</span>
+          <b>TAMILA · Speaking Lounge</b>
+          <span class="desc">7 Topics Speaking Lounge · 汉语故事、朋友、爱情、梦想、夜生活、网购、手机话题。</span>
+        </a>
+      </div>
     </section>
+
+    <section class="category" id="hsk">
+      <div class="category-head"><div><h2>HSK 课程</h2><p>按 HSK 教材课次整理，适合系统课和复习课。</p></div></div>
+      <div class="empty">这里以后放：HSK1 第2课、HSK1 第3课、HSK复习课等。</div>
+    </section>
+
+    <section class="category" id="new-target">
+      <div class="category-head"><div><h2>新目标汉语口语</h2><p>按《新目标汉语口语课本》册数和单元整理。</p></div></div>
+      <div class="empty">这里以后放：Book 2 Unit 1、Book 2 Unit 2、Book 2 Unit 3 等。</div>
+    </section>
+
+    <section class="category" id="culture">
+      <div class="category-head"><div><h2>文化专题</h2><p>历史、节日、思想、社会文化类沉浸式课件。</p></div></div>
+      <div class="empty">这里以后放：百家争鸣、春节、中秋、中国城市等专题。</div>
+    </section>
+
+    <section class="category" id="exam">
+      <div class="category-head"><div><h2>考试训练</h2><p>口语考试、模拟测评、阶段复习和专项强化。</p></div></div>
+      <div class="empty">这里以后放：口语考试模拟、HSK复习、期末复盘等。</div>
+    </section>
+
+    <footer>建议文件命名统一使用英文小写和短横线，例如：hsk1-lesson2.html、new-target-book2-unit2.html、tamila-speaking-lounge.html。</footer>
   </main>
 </body>
 </html>
