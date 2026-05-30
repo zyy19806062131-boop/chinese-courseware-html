@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新HSK教程1 · 第1-2课：你好！我叫…</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --red: #C0392B;
+            --red-dark: #922B21;
+            --orange: #E67E22;
+            --blue: #2980B9;
+            --green: #27AE60;
+            --bg: #F4F6F8;
+            --text: #2C3E50;
+            --muted: #7F8C8D;
+            --pinyin: #C0392B;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .presentation { width: 100%; height: 100vh; display: flex; flex-direction: column; }
+
+        /* Header */
+        .header {
+            background: var(--red); color: white;
+            padding: 9px 26px; display: flex;
+            justify-content: space-between; align-items: center;
+            flex-shrink: 0; box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+        .header-title { font-size: 14px; font-weight: 500; letter-spacing: 1px; }
+        .slide-counter { font-size: 13px; opacity: 0.8; }
+
+        .progress-bar { height: 3px; background: rgba(255,255,255,0.25); flex-shrink: 0; }
+        .progress-fill { height: 100%; background: white; transition: width 0.35s ease; }
+
+        /* Slides */
+        .slides-wrapper { flex: 1; overflow: hidden; position: relative; }
+        .slide {
+            position: absolute; inset: 0;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            padding: 24px 44px;
+            opacity: 0; transform: translateX(50px);
+            transition: opacity 0.38s ease, transform 0.38s ease;
+            pointer-events: none;
+        }
+        .slide.active { opacity: 1; transform: translateX(0); pointer-events: all; }
+        .slide.exit { opacity: 0; transform: translateX(-50px); }
+
+        /* Nav */
+        .nav {
+            display: flex; justify-content: center; align-items: center;
+            gap: 12px; padding: 10px 18px;
+            background: white; border-top: 1px solid #E8ECF0; flex-shrink: 0;
+        }
+        .nav-btn {
+            background: var(--red); color: white; border: none;
+            padding: 8px 22px; border-radius: 20px; font-size: 13px;
+            cursor: pointer; transition: background 0.2s; font-family: inherit; font-weight: 500;
+        }
+        .nav-btn:hover { background: var(--red-dark); }
+        .nav-btn:disabled { background: #BDC3C7; cursor: not-allowed; }
+        .nav-dots { display: flex; gap: 4px; flex-wrap: wrap; justify-content: center; max-width: 340px; }
+        .dot { width: 6px; height: 6px; border-radius: 50%; background: #BDC3C7; cursor: pointer; transition: background 0.2s; }
+        .dot.active { background: var(--red); }
+        .dot.part2 { background: #A9CCE3; }
+        .dot.part2.active { background: var(--blue); }
+
+        /* ── Shared ── */
+        .tag {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: var(--red); color: white;
+            padding: 4px 14px; border-radius: 4px;
+            font-size: 13px; font-weight: 600; margin-bottom: 18px; letter-spacing: 0.5px;
+        }
+        .tag-en { font-size: 11px; opacity: 0.85; font-weight: 400; }
+        .tag.blue { background: var(--blue); }
+
+        /* ── COVER ── */
+        .slide-cover { background: linear-gradient(140deg, #C0392B 0%, #7B241C 100%); color: white; text-align: center; }
+        .cov-lessons { font-size: 12px; letter-spacing: 5px; opacity: 0.7; text-transform: uppercase; margin-bottom: 6px; }
+        .cov-sub { font-size: 14px; opacity: 0.8; letter-spacing: 2px; margin-bottom: 4px; }
+        .cov-py { font-size: 20px; opacity: 0.88; letter-spacing: 3px; margin-bottom: 6px; }
+        .cov-title { font-size: 52px; font-weight: 700; margin-bottom: 8px; text-shadow: 0 2px 12px rgba(0,0,0,0.2); }
+        .cov-en { font-size: 20px; font-weight: 300; opacity: 0.82; margin-bottom: 30px; }
+        .cov-badges { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+        .cov-badge {
+            background: rgba(255,255,255,0.18); border: 1.5px solid rgba(255,255,255,0.4);
+            color: white; padding: 6px 18px; border-radius: 18px; font-size: 13px; letter-spacing: 1px;
+        }
+        .cov-deco { position: absolute; border-radius: 50%; background: rgba(255,255,255,0.05); }
+
+        /* ── PART DIVIDER ── */
+        .slide-divider { color: white; text-align: center; }
+        .slide-divider.p1 { background: linear-gradient(135deg, #C0392B, #E74C3C); }
+        .slide-divider.p2 { background: linear-gradient(135deg, #1A5276, #2980B9); }
+        .div-part { font-size: 12px; letter-spacing: 4px; opacity: 0.75; text-transform: uppercase; margin-bottom: 8px; }
+        .div-num { font-size: 64px; font-weight: 700; opacity: 0.25; line-height: 1; margin-bottom: -10px; }
+        .div-title-zh { font-size: 42px; font-weight: 700; margin-bottom: 8px; }
+        .div-title-en { font-size: 18px; font-weight: 300; opacity: 0.82; margin-bottom: 20px; }
+        .div-topics { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+        .div-topic {
+            background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.35);
+            color: white; padding: 5px 16px; border-radius: 16px; font-size: 13px;
+        }
+
+        /* ── OBJECTIVES ── */
+        .obj-card {
+            display: flex; gap: 14px; align-items: flex-start;
+            background: white; border-left: 4px solid var(--red);
+            padding: 14px 20px; border-radius: 0 8px 8px 0;
+            margin-bottom: 10px; width: 100%; max-width: 700px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        .obj-card.blue { border-left-color: var(--blue); }
+        .obj-icon { font-size: 22px; flex-shrink: 0; }
+        .obj-zh { font-size: 15px; font-weight: 600; margin-bottom: 4px; line-height: 1.5; }
+        .obj-en { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+        /* ── DIALOGUE ── */
+        .scene { font-size: 12px; color: var(--muted); text-align: center; margin-bottom: 20px; font-style: italic; max-width: 560px; line-height: 1.6; }
+        .dialogue { display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 560px; }
+        .dl { display: flex; align-items: flex-start; gap: 10px; }
+        .dl.r { flex-direction: row-reverse; }
+        .avatar {
+            width: 40px; height: 40px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-size: 15px; font-weight: 700; flex-shrink: 0;
+        }
+        .bubble { background: white; border-radius: 10px; padding: 10px 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); max-width: 360px; }
+        .dl.r .bubble { background: #EBF5FB; border: 1px solid #AED6F1; }
+        .spk { font-size: 10px; color: var(--muted); margin-bottom: 2px; }
+        .bpy { font-size: 12px; color: var(--pinyin); letter-spacing: 1px; margin-bottom: 2px; }
+        .bzh { font-size: 22px; font-weight: 700; margin-bottom: 2px; }
+        .ben { font-size: 12px; color: var(--muted); font-style: italic; }
+
+        /* Xiaoyu tip inline */
+        .xtip {
+            background: #FFFBF0; border: 1px solid #F0D070; border-radius: 8px;
+            padding: 10px 14px; font-size: 12px; color: #7D6608; line-height: 1.5;
+            display: flex; gap: 8px; align-items: flex-start;
+            max-width: 560px; width: 100%; margin-top: 8px;
+        }
+
+        /* ── VOCABULARY ── */
+        .vocab-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; width: 100%; max-width: 700px; }
+        .vocab-grid.cols2 { grid-template-columns: repeat(2,1fr); max-width: 520px; }
+        .vocab-grid.cols4 { grid-template-columns: repeat(4,1fr); max-width: 720px; }
+        .vc {
+            background: white; border-radius: 10px; padding: 14px 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+            border-top: 3px solid var(--red); position: relative;
+        }
+        .vc.blue { border-top-color: var(--blue); }
+        .vn { position: absolute; top: 8px; right: 10px; font-size: 10px; color: var(--muted); background: #F0F2F5; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .vpy { font-size: 12px; color: var(--pinyin); letter-spacing: 1px; margin-bottom: 3px; }
+        .vzh { font-size: 28px; font-weight: 700; margin-bottom: 4px; }
+        .vpos { font-size: 9px; color: white; background: var(--orange); padding: 1px 6px; border-radius: 7px; display: inline-block; margin-bottom: 3px; }
+        .vpos.blue { background: var(--blue); }
+        .ven { font-size: 12px; color: var(--muted); }
+
+        /* ── LANGUAGE POINTS ── */
+        .lp-box { background: white; border-radius: 12px; padding: 22px 26px; max-width: 660px; width: 100%; box-shadow: 0 2px 12px rgba(0,0,0,0.07); }
+        .lp-title { font-size: 17px; font-weight: 700; margin-bottom: 3px; }
+        .lp-sub { font-size: 12px; color: var(--muted); margin-bottom: 14px; }
+        .lp-compare { display: flex; gap: 14px; align-items: stretch; margin-bottom: 14px; }
+        .lp-item { flex: 1; background: #F7F9FC; border-radius: 8px; padding: 16px; text-align: center; }
+        .lp-item.hl { background: #FEF5F5; border: 2px solid var(--red); }
+        .lchar { font-size: 44px; font-weight: 700; color: var(--red); }
+        .lchar-py { font-size: 15px; color: var(--pinyin); margin-bottom: 3px; }
+        .lchar-desc { font-size: 12px; color: var(--muted); line-height: 1.4; }
+        .vs { display: flex; align-items: center; font-size: 18px; color: #BDC3C7; font-weight: 700; }
+        .lp-ex { font-size: 14px; padding: 8px 12px; background: #F7F9FC; border-radius: 5px; border-left: 3px solid var(--red); margin-bottom: 7px; display: flex; align-items: baseline; gap: 8px; }
+        .lp-ex .ez { font-size: 18px; font-weight: 600; }
+        .lp-ex .ee { font-size: 12px; color: var(--muted); }
+        .note { background: #FFFBF0; border: 1px solid #F0D070; border-radius: 6px; padding: 10px 14px; font-size: 12px; color: #7D6608; line-height: 1.5; display: flex; gap: 7px; margin-top: 10px; }
+
+        /* ── GRAMMAR ── */
+        .grammar-box { background: white; border-radius: 12px; padding: 22px 26px; max-width: 660px; width: 100%; box-shadow: 0 2px 12px rgba(0,0,0,0.07); }
+        .svo { display: flex; gap: 8px; align-items: center; justify-content: center; margin: 18px 0; flex-wrap: wrap; }
+        .svo-block { padding: 10px 24px; border-radius: 8px; font-size: 20px; font-weight: 700; text-align: center; }
+        .svo-block.s { background: #EBF5FB; color: var(--blue); border: 2px solid #AED6F1; }
+        .svo-block.v { background: #FEF9F9; color: var(--red); border: 2px solid #F5C6C2; }
+        .svo-block.o { background: #EAFAF1; color: var(--green); border: 2px solid #A9DFBF; }
+        .svo-arrow { font-size: 20px; color: var(--muted); }
+        .svo-label { font-size: 11px; text-align: center; color: var(--muted); margin-top: 3px; }
+        .eg-row { display: flex; gap: 8px; align-items: center; margin-top: 6px; padding: 10px 12px; background: #F7F9FC; border-radius: 6px; border-left: 3px solid var(--blue); }
+        .eg-s { background: #EBF5FB; color: var(--blue); padding: 3px 8px; border-radius: 4px; font-size: 20px; font-weight: 700; }
+        .eg-v { background: #FEF9F9; color: var(--red); padding: 3px 8px; border-radius: 4px; font-size: 20px; font-weight: 700; }
+        .eg-o { background: #EAFAF1; color: var(--green); padding: 3px 8px; border-radius: 4px; font-size: 20px; font-weight: 700; }
+        .eg-en { font-size: 13px; color: var(--muted); margin-left: 4px; }
+
+        /* ── CHINESE NAMES ── */
+        .name-box { background: white; border-radius: 12px; padding: 22px 26px; max-width: 640px; width: 100%; box-shadow: 0 2px 12px rgba(0,0,0,0.07); }
+        .name-structure { display: flex; gap: 16px; align-items: center; justify-content: center; margin: 18px 0; }
+        .name-part { padding: 16px 28px; border-radius: 8px; text-align: center; }
+        .name-part.surname { background: #FEF5F5; border: 2px solid #F5C6C2; }
+        .name-part.given { background: #EBF5FB; border: 2px solid #AED6F1; }
+        .np-label { font-size: 11px; color: var(--muted); margin-bottom: 4px; }
+        .np-zh { font-size: 22px; font-weight: 700; }
+        .np-en { font-size: 12px; color: var(--muted); }
+        .name-plus { font-size: 28px; color: var(--muted); font-weight: 300; }
+        .name-examples { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
+        .name-eg { background: #F7F9FC; border-radius: 8px; padding: 12px; text-align: center; }
+        .ne-full { font-size: 26px; font-weight: 700; margin-bottom: 4px; }
+        .ne-parts { font-size: 12px; color: var(--muted); }
+        .ne-en { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+        /* ── TONGUE TWISTER ── */
+        .tw-box {
+            background: linear-gradient(135deg, #FFF8F0, #FFF0E0);
+            border: 2px solid #F0C060; border-radius: 14px;
+            padding: 24px 32px; max-width: 620px; width: 100%;
+        }
+        .tw-label { font-size: 12px; color: #E67E22; font-weight: 600; letter-spacing: 2px; margin-bottom: 16px; text-align: center; }
+        .tw-section { margin-bottom: 16px; }
+        .tw-lesson { font-size: 10px; color: var(--orange); font-weight: 600; letter-spacing: 2px; margin-bottom: 8px; text-transform: uppercase; }
+        .tw-py { font-size: 13px; color: var(--pinyin); letter-spacing: 1px; margin-bottom: 2px; }
+        .tw-zh { font-size: 26px; font-weight: 700; margin-bottom: 2px; }
+        .tw-en { font-size: 12px; color: var(--muted); font-style: italic; }
+        .tw-divider { height: 1px; background: #F0D070; margin: 14px 0; }
+
+        /* ── CULTURE ── */
+        .culture-box { background: white; border-radius: 12px; padding: 20px 24px; max-width: 680px; width: 100%; box-shadow: 0 2px 12px rgba(0,0,0,0.07); }
+        .culture-title { font-size: 18px; font-weight: 700; margin-bottom: 14px; display: flex; align-items: center; gap: 7px; }
+        .culture-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; }
+        .cp { background: #F7F9FC; border-radius: 8px; padding: 12px 14px; border-left: 4px solid var(--red); }
+        .cp.blue { border-left-color: var(--blue); }
+        .cp-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+        .cp-text { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+        /* ── QUIZ ── */
+        .quiz-wrap { width: 100%; max-width: 540px; display: flex; flex-direction: column; align-items: center; }
+        .qprog { font-size: 12px; color: var(--muted); margin-bottom: 10px; }
+        .qq { font-size: 24px; font-weight: 700; text-align: center; margin-bottom: 5px; }
+        .qhint { font-size: 13px; color: var(--pinyin); margin-bottom: 20px; letter-spacing: 1px; min-height: 18px; text-align: center; }
+        .qopts { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; width: 100%; }
+        .qbtn { background: white; border: 2px solid #DDE1E7; border-radius: 9px; padding: 14px 12px; font-size: 18px; cursor: pointer; transition: all 0.2s; text-align: center; font-family: inherit; font-weight: 500; }
+        .qbtn:hover:not(:disabled) { border-color: var(--red); background: #FEF5F5; }
+        .qbtn.correct { border-color: var(--green); background: #EAFAF1; color: var(--green); }
+        .qbtn.wrong { border-color: #E74C3C; background: #FDEDEC; color: #E74C3C; }
+        .qfb { margin-top: 14px; font-size: 16px; font-weight: 600; text-align: center; min-height: 24px; }
+        .qnxt { display: none; margin-top: 12px; background: var(--red); color: white; border: none; padding: 8px 22px; border-radius: 20px; font-size: 13px; cursor: pointer; font-family: inherit; font-weight: 500; }
+
+        /* ── PRACTICE ── */
+        .practice-box { background: white; border-radius: 12px; padding: 18px 24px; max-width: 620px; width: 100%; box-shadow: 0 2px 12px rgba(0,0,0,0.07); }
+        .pitem { display: flex; gap: 12px; align-items: flex-start; padding: 10px 0; border-bottom: 1px solid #F0F2F5; }
+        .pitem:last-child { border-bottom: none; }
+        .picon { font-size: 22px; flex-shrink: 0; }
+        .ptitle { font-size: 15px; font-weight: 600; margin-bottom: 3px; }
+        .psub { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+        /* ── SUMMARY ── */
+        .summary-grid { display: grid; grid-template-columns: repeat(5,1fr); gap: 8px; max-width: 720px; width: 100%; margin-bottom: 14px; }
+        .si {
+            background: white; border-radius: 8px; padding: 10px 8px;
+            text-align: center; box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            border-bottom: 3px solid var(--red);
+        }
+        .si.blue { border-bottom-color: var(--blue); }
+        .si-py { font-size: 10px; color: var(--pinyin); margin-bottom: 2px; }
+        .si-zh { font-size: 18px; font-weight: 700; margin-bottom: 2px; }
+        .si-en { font-size: 10px; color: var(--muted); }
+        .congrats { text-align: center; }
+        .cg-emoji { font-size: 36px; margin-bottom: 6px; }
+        .cg-title { font-size: 20px; font-weight: 700; color: var(--red); margin-bottom: 3px; }
+        .cg-sub { font-size: 13px; color: var(--muted); }
+    </style>
+</head>
+<body>
+<div class="presentation">
+
+    <div class="header">
+        <div class="header-title">新HSK教程1 · New HSK Course 1</div>
+        <div class="slide-counter" id="slideCounter">1 / 24</div>
+    </div>
+    <div class="progress-bar">
+        <div class="progress-fill" id="progressFill" style="width:4.17%"></div>
+    </div>
+
+    <div class="slides-wrapper">
+
+        <!-- 1. COVER -->
+        <div class="slide slide-cover active" id="slide-1">
+            <div class="cov-deco" style="width:300px;height:300px;top:-80px;right:-70px;"></div>
+            <div class="cov-deco" style="width:400px;height:400px;bottom:-120px;left:-100px;"></div>
+            <div class="cov-lessons">Lessons 1–2 · 第一、二课</div>
+            <div class="cov-py">Nǐ hǎo! Wǒ jiào…</div>
+            <div class="cov-title">你好！我叫…</div>
+            <div class="cov-en">Hello! My name is…</div>
+            <div class="cov-badges">
+                <div class="cov-badge">打招呼 Greetings</div>
+                <div class="cov-badge">自我介绍 Self-Introduction</div>
+                <div class="cov-badge">新HSK · Level 1</div>
+            </div>
+        </div>
+
+        <!-- 2. OBJECTIVES (combined) -->
+        <div class="slide" id="slide-2" style="background:#FAFBFC;">
+            <div class="tag">🎯 学习目标 <span class="tag-en">Objectives — Lessons 1 & 2</span></div>
+            <div class="obj-card"><div class="obj-icon">💬</div><div><div class="obj-zh">能听懂并使用礼貌用语打招呼、致谢、告别。</div><div class="obj-en">Use polite expressions for greetings, thanks, and farewells.</div></div></div>
+            <div class="obj-card"><div class="obj-icon">🎓</div><div><div class="obj-zh">了解并使用第二人称代词敬称 <strong>「您」</strong>。</div><div class="obj-en">Understand and use the honorific pronoun "您".</div></div></div>
+            <div class="obj-card blue"><div class="obj-icon">👋</div><div><div class="obj-zh">能用中文姓名自我介绍，使用"对不起"和"没关系"。</div><div class="obj-en">Introduce yourself in Chinese and use apology expressions.</div></div></div>
+            <div class="obj-card blue"><div class="obj-icon">📐</div><div><div class="obj-zh">掌握汉语的基本语序（主语+谓语+宾语）。了解中文姓名的构成。</div><div class="obj-en">Master basic Chinese word order (S+V+O) and understand Chinese name structure.</div></div></div>
+        </div>
+
+        <!-- 3. PART 1 DIVIDER -->
+        <div class="slide slide-divider p1" id="slide-3">
+            <div class="div-part">Part 1 · 第一课</div>
+            <div class="div-num">1</div>
+            <div class="div-title-zh">打招呼</div>
+            <div class="div-title-en">Greetings, Thanks & Farewells</div>
+            <div class="div-topics">
+                <div class="div-topic">你好 Hello</div>
+                <div class="div-topic">谢谢 Thank you</div>
+                <div class="div-topic">再见 Goodbye</div>
+                <div class="div-topic">您 Honorific</div>
+            </div>
+        </div>
+
+        <!-- 4. TEXT 1-1 -->
+        <div class="slide" id="slide-4" style="background:#FAFBFC;">
+            <div class="tag">📖 课文1 <span class="tag-en">Text 1 — In the office</span></div>
+            <div class="scene">开学第一天，在办公室里，王一飞和AI助教小语打招呼。<br><em>On the first day of school, Wang Yifei greets AI assistant Xiaoyu.</em></div>
+            <div class="dialogue">
+                <div class="dl">
+                    <div class="avatar" style="background:var(--blue);">飞</div>
+                    <div class="bubble"><div class="spk">王一飞 Wáng Yīfēi</div><div class="bpy">Āi Xiǎoyǔ, nǐ hǎo!</div><div class="bzh">AI小语，你好！</div><div class="ben">Hello, AI Xiaoyu!</div></div>
+                </div>
+                <div class="dl r">
+                    <div class="avatar" style="background:var(--red);">语</div>
+                    <div class="bubble"><div class="spk">小语 Xiǎoyǔ</div><div class="bpy">Wáng lǎoshī, nǐ hǎo!</div><div class="bzh">王老师，你好！</div><div class="ben">Hello, Ms. Wang!</div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. TEXT 1-2 -->
+        <div class="slide" id="slide-5" style="background:#FAFBFC;">
+            <div class="tag">📖 课文2 <span class="tag-en">Text 2 — In the classroom</span></div>
+            <div class="scene">课堂上，学生们学习打招呼用语。<br><em>In class, students learn greeting expressions.</em></div>
+            <div class="dialogue">
+                <div class="dl">
+                    <div class="avatar" style="background:var(--blue);">飞</div>
+                    <div class="bubble"><div class="spk">王一飞</div><div class="bpy">Dàjiā hǎo!</div><div class="bzh">大家好！</div><div class="ben">Hello, everyone!</div></div>
+                </div>
+                <div class="dl r">
+                    <div class="avatar" style="background:var(--green);">生</div>
+                    <div class="bubble"><div class="spk">学生们</div><div class="bpy">Lǎoshī, nín hǎo!</div><div class="bzh">老师，<span style="color:var(--red);">您</span>好！</div><div class="ben">Hello, teacher! (formal)</div></div>
+                </div>
+                <div class="dl">
+                    <div class="avatar" style="background:var(--red);">语</div>
+                    <div class="bubble"><div class="spk">小语</div><div class="bpy">Nǐmen hǎo!</div><div class="bzh">你们好！</div><div class="ben">Hello, all of you!</div></div>
+                </div>
+                <div class="dl r">
+                    <div class="avatar" style="background:var(--green);">生</div>
+                    <div class="bubble"><div class="spk">学生们</div><div class="bpy">Nǐ hǎo, Xiǎoyǔ!</div><div class="bzh">你好，小语！</div><div class="ben">Hello, Xiaoyu!</div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 6. TEXT 1-3 -->
+        <div class="slide" id="slide-6" style="background:#FAFBFC;">
+            <div class="tag">📖 课文3 <span class="tag-en">Text 3 — Gratitude & Farewell</span></div>
+            <div class="scene">学生们学习致谢、告别语。<br><em>Students learn expressions of gratitude and farewell.</em></div>
+            <div class="dialogue">
+                <div class="dl r"><div class="avatar" style="background:var(--green);">生</div><div class="bubble"><div class="spk">学生们</div><div class="bpy">Xièxie!</div><div class="bzh">谢谢！</div><div class="ben">Thank you!</div></div></div>
+                <div class="dl"><div class="avatar" style="background:var(--red);">语</div><div class="bubble"><div class="spk">小语</div><div class="bpy">Bú kèqi!</div><div class="bzh">不客气！</div><div class="ben">You're welcome!</div></div></div>
+                <div class="dl"><div class="avatar" style="background:var(--blue);">飞</div><div class="bubble"><div class="spk">王一飞</div><div class="bpy">Tóngxuémen, zàijiàn!</div><div class="bzh">同学们，再见！</div><div class="ben">Goodbye, class!</div></div></div>
+                <div class="dl r"><div class="avatar" style="background:var(--green);">生</div><div class="bubble"><div class="spk">学生们</div><div class="bpy">Lǎoshī, zàijiàn!</div><div class="bzh">老师，再见！</div><div class="ben">Goodbye, teacher!</div></div></div>
+            </div>
+        </div>
+
+        <!-- 7. L1 VOCAB 1–6 -->
+        <div class="slide" id="slide-7">
+            <div class="tag">📝 生词 <span class="tag-en">New Words · 1–6</span></div>
+            <div class="vocab-grid">
+                <div class="vc"><div class="vn">1</div><div class="vpy">nǐ hǎo</div><div class="vzh">你好</div><div class="ven">hello; hi</div></div>
+                <div class="vc"><div class="vn">2</div><div class="vpy">dàjiā</div><div class="vzh">大家</div><div class="vpos">pron.</div><div class="ven">everybody</div></div>
+                <div class="vc"><div class="vn">3</div><div class="vpy">hǎo</div><div class="vzh">好</div><div class="vpos">adj.</div><div class="ven">good; fine</div></div>
+                <div class="vc"><div class="vn">4</div><div class="vpy">xuéshēng</div><div class="vzh">学生</div><div class="vpos">n.</div><div class="ven">student</div></div>
+                <div class="vc"><div class="vn">5</div><div class="vpy">men</div><div class="vzh">们</div><div class="vpos">suf.</div><div class="ven">plural (people)</div></div>
+                <div class="vc"><div class="vn">6</div><div class="vpy">lǎoshī</div><div class="vzh">老师</div><div class="vpos">n.</div><div class="ven">teacher</div></div>
+            </div>
+        </div>
+
+        <!-- 8. L1 VOCAB 7–12 -->
+        <div class="slide" id="slide-8">
+            <div class="tag">📝 生词 <span class="tag-en">New Words · 7–12</span></div>
+            <div class="vocab-grid">
+                <div class="vc"><div class="vn">7</div><div class="vpy">nín</div><div class="vzh">您</div><div class="vpos">pron.</div><div class="ven">you (honorific)</div></div>
+                <div class="vc"><div class="vn">8</div><div class="vpy">nǐmen</div><div class="vzh">你们</div><div class="vpos">pron.</div><div class="ven">you (plural)</div></div>
+                <div class="vc"><div class="vn">9</div><div class="vpy">xièxie</div><div class="vzh">谢谢</div><div class="vpos">v.</div><div class="ven">thank you</div></div>
+                <div class="vc"><div class="vn">10</div><div class="vpy">bú kèqi</div><div class="vzh">不客气</div><div class="ven">you're welcome</div></div>
+                <div class="vc"><div class="vn">11</div><div class="vpy">tóngxué</div><div class="vzh">同学</div><div class="vpos">n.</div><div class="ven">classmate</div></div>
+                <div class="vc"><div class="vn">12</div><div class="vpy">zàijiàn</div><div class="vzh">再见</div><div class="vpos">v.</div><div class="ven">goodbye</div></div>
+            </div>
+        </div>
+
+        <!-- 9. LP: 您 vs 你 -->
+        <div class="slide" id="slide-9">
+            <div class="tag">💡 语言点 <span class="tag-en">Language Point · 您 vs 你</span></div>
+            <div class="lp-box">
+                <div class="lp-title">您 vs 你 — Two ways to say "you"</div>
+                <div class="lp-sub">Same meaning, different formality levels.</div>
+                <div class="lp-compare">
+                    <div class="lp-item"><div class="lchar-py">nǐ</div><div class="lchar">你</div><div class="lchar-desc">Casual / informal<br>Friends, peers, classmates</div></div>
+                    <div class="vs">VS</div>
+                    <div class="lp-item hl"><div class="lchar-py">nín</div><div class="lchar">您</div><div class="lchar-desc">Formal / respectful<br>Teachers, elders, strangers</div></div>
+                </div>
+                <div class="lp-ex"><span class="ez" style="color:var(--blue);">老师，您好！</span><span class="ee">Hello, teacher! (respectful ✓)</span></div>
+                <div class="lp-ex"><span class="ez">朋友，你好！</span><span class="ee">Hello, friend! (casual ✓)</span></div>
+            </div>
+        </div>
+
+        <!-- 10. LP: 们 -->
+        <div class="slide" id="slide-10">
+            <div class="tag">💡 语言点 <span class="tag-en">Language Point · Plural Suffix 们</span></div>
+            <div class="lp-box">
+                <div class="lp-title">们 — Making Words Plural</div>
+                <div class="lp-sub">Add 们 after pronouns or nouns for people to make them plural.</div>
+                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0;">
+                    <div style="background:#F7F9FC;border-radius:8px;padding:14px;text-align:center;">
+                        <div style="font-size:12px;color:var(--pinyin);margin-bottom:3px;">nǐ → nǐmen</div>
+                        <div style="font-size:22px;font-weight:700;">你 → 你们</div>
+                        <div style="font-size:11px;color:var(--muted);">you → you (all)</div>
+                    </div>
+                    <div style="background:#F7F9FC;border-radius:8px;padding:14px;text-align:center;">
+                        <div style="font-size:12px;color:var(--pinyin);margin-bottom:3px;">tā → tāmen</div>
+                        <div style="font-size:22px;font-weight:700;">他 → 他们</div>
+                        <div style="font-size:11px;color:var(--muted);">he → they</div>
+                    </div>
+                    <div style="background:#F7F9FC;border-radius:8px;padding:14px;text-align:center;">
+                        <div style="font-size:12px;color:var(--pinyin);margin-bottom:3px;">tóngxué → men</div>
+                        <div style="font-size:22px;font-weight:700;">同学 → 同学们</div>
+                        <div style="font-size:11px;color:var(--muted);">classmate → classmates</div>
+                    </div>
+                </div>
+                <div class="note"><span>⚠️</span><span><strong>Note:</strong> 们 is only used with people. 学生们 ✓ &nbsp;|&nbsp; 书们 ✗</span></div>
+            </div>
+        </div>
+
+        <!-- 11. PART 2 DIVIDER -->
+        <div class="slide slide-divider p2" id="slide-11">
+            <div class="div-part">Part 2 · 第二课</div>
+            <div class="div-num">2</div>
+            <div class="div-title-zh">我叫李文</div>
+            <div class="div-title-en">Self-Introduction & Apology</div>
+            <div class="div-topics">
+                <div class="div-topic">自我介绍 Introduction</div>
+                <div class="div-topic">对不起 Sorry</div>
+                <div class="div-topic">基本语序 Word Order</div>
+                <div class="div-topic">中文姓名 Names</div>
+            </div>
+        </div>
+
+        <!-- 12. TEXT 2-1 -->
+        <div class="slide" id="slide-12" style="background:#FAFBFC;">
+            <div class="tag blue">📖 课文1 <span class="tag-en">Text 1 — What's your name?</span></div>
+            <div class="scene">在教室里，王一飞在认识学生。<br><em>Wang Yifei gets to know the students in the classroom.</em></div>
+            <div class="dialogue">
+                <div class="dl">
+                    <div class="avatar" style="background:var(--blue);">飞</div>
+                    <div class="bubble"><div class="spk">王一飞 Wáng Yīfēi</div><div class="bpy">Qǐngwèn, nǐ jiào shénme míngzi?</div><div class="bzh">请问，你叫什么名字？</div><div class="ben">May I ask, what's your name?</div></div>
+                </div>
+                <div class="dl r">
+                    <div class="avatar" style="background:#8E44AD;">中</div>
+                    <div class="bubble"><div class="spk">陈天中 Chén Tiānzhōng</div><div class="bpy">Wǒ jiào Chén Tiānzhōng.</div><div class="bzh">我叫陈天中。</div><div class="ben">My name is Chen Tianzhong.</div></div>
+                </div>
+            </div>
+            <div class="xtip"><span>💡</span><span><strong>请问 qǐngwèn</strong> is a polite expression used to request someone to answer a question — like "May I ask…" or "Excuse me…"</span></div>
+        </div>
+
+        <!-- 13. TEXT 2-2 -->
+        <div class="slide" id="slide-13" style="background:#FAFBFC;">
+            <div class="tag blue">📖 课文2 <span class="tag-en">Text 2 — A case of mistaken identity</span></div>
+            <div class="scene">在校园里，陈天中认错了人。<br><em>On campus, Chen Tianzhong mistook Bai Jiayue for someone else.</em></div>
+            <div class="dialogue">
+                <div class="dl">
+                    <div class="avatar" style="background:#8E44AD;">中</div>
+                    <div class="bubble"><div class="spk">陈天中</div><div class="bpy">Nǐ hǎo, Ānnī!</div><div class="bzh">你好，安妮！</div><div class="ben">Hello, Annie!</div></div>
+                </div>
+                <div class="dl r">
+                    <div class="avatar" style="background:#E67E22;">月</div>
+                    <div class="bubble"><div class="spk">白家月 Bái Jiāyuè</div><div class="bpy">Nǐ hǎo! Wǒ bú shì Ānnī, wǒ shì Bái Jiāyuè.</div><div class="bzh">你好！我不是安妮，我是白家月。</div><div class="ben">Hello! I'm not Annie — I'm Bai Jiayue.</div></div>
+                </div>
+                <div class="dl">
+                    <div class="avatar" style="background:#8E44AD;">中</div>
+                    <div class="bubble"><div class="spk">陈天中</div><div class="bpy">Duìbuqǐ!</div><div class="bzh">对不起！</div><div class="ben">Sorry!</div></div>
+                </div>
+                <div class="dl r">
+                    <div class="avatar" style="background:#E67E22;">月</div>
+                    <div class="bubble"><div class="spk">白家月</div><div class="bpy">Méi guānxi!</div><div class="bzh">没关系！</div><div class="ben">It's okay! / Never mind!</div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 14. TEXT 2-3 -->
+        <div class="slide" id="slide-14" style="background:#FAFBFC;">
+            <div class="tag blue">📖 课文3 <span class="tag-en">Text 3 — Nice to meet you</span></div>
+            <div class="scene">在校园里，李文和白家月第一次相遇。<br><em>Li Wen and Bai Jiayue meet for the first time on campus.</em></div>
+            <div class="dialogue">
+                <div class="dl">
+                    <div class="avatar" style="background:#16A085;">文</div>
+                    <div class="bubble"><div class="spk">李文 Lǐ Wén</div><div class="bpy">Nǐ hǎo! Wǒ jiào Lǐ Wén.</div><div class="bzh">你好！我叫<span style="color:var(--red);">李文</span>。</div><div class="ben">Hello! My name is Li Wen.</div></div>
+                </div>
+                <div class="dl r">
+                    <div class="avatar" style="background:#E67E22;">月</div>
+                    <div class="bubble"><div class="spk">白家月</div><div class="bpy">Nǐ hǎo! Wǒ jiào Bái Jiāyuè.</div><div class="bzh">你好！我叫<span style="color:var(--blue);">白家月</span>。</div><div class="ben">Hello! My name is Bai Jiayue.</div></div>
+                </div>
+                <div class="dl">
+                    <div class="avatar" style="background:#16A085;">文</div>
+                    <div class="bubble"><div class="spk">李文</div><div class="bpy">Hěn gāoxìng rènshi nǐ.</div><div class="bzh">很高兴认识你。</div><div class="ben">Nice to meet you.</div></div>
+                </div>
+                <div class="dl r">
+                    <div class="avatar" style="background:#E67E22;">月</div>
+                    <div class="bubble"><div class="spk">白家月</div><div class="bpy">Rènshi nǐ wǒ yě hěn gāoxìng.</div><div class="bzh">认识你我也很高兴。</div><div class="ben">Nice to meet you too.</div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 15. L2 VOCAB 1–6 -->
+        <div class="slide" id="slide-15">
+            <div class="tag blue">📝 生词 <span class="tag-en">New Words · 13–18</span></div>
+            <div class="vocab-grid">
+                <div class="vc blue"><div class="vn">13</div><div class="vpy">qǐngwèn</div><div class="vzh">请问</div><div class="vpos blue">v.</div><div class="ven">excuse me; may I ask</div></div>
+                <div class="vc blue"><div class="vn">14</div><div class="vpy">nǐ</div><div class="vzh">你</div><div class="vpos blue">pron.</div><div class="ven">you (singular)</div></div>
+                <div class="vc blue"><div class="vn">15</div><div class="vpy">jiào</div><div class="vzh">叫</div><div class="vpos blue">v.</div><div class="ven">be called; named</div></div>
+                <div class="vc blue"><div class="vn">16</div><div class="vpy">shénme</div><div class="vzh">什么</div><div class="vpos blue">pron.</div><div class="ven">what</div></div>
+                <div class="vc blue"><div class="vn">17</div><div class="vpy">míngzi</div><div class="vzh">名字</div><div class="vpos blue">n.</div><div class="ven">name</div></div>
+                <div class="vc blue"><div class="vn">18</div><div class="vpy">wǒ</div><div class="vzh">我</div><div class="vpos blue">pron.</div><div class="ven">I; me</div></div>
+            </div>
+        </div>
+
+        <!-- 16. L2 VOCAB 7–11 -->
+        <div class="slide" id="slide-16">
+            <div class="tag blue">📝 生词 <span class="tag-en">New Words · 19–23</span></div>
+            <div class="vocab-grid cols2" style="max-width:560px;">
+                <div class="vc blue"><div class="vn">19</div><div class="vpy">bù</div><div class="vzh">不</div><div class="vpos blue">adv.</div><div class="ven">not; no</div></div>
+                <div class="vc blue"><div class="vn">20</div><div class="vpy">shì</div><div class="vzh">是</div><div class="vpos blue">v.</div><div class="ven">be; am / is / are</div></div>
+                <div class="vc blue"><div class="vn">21</div><div class="vpy">duìbuqǐ</div><div class="vzh">对不起</div><div class="vpos blue">v.</div><div class="ven">sorry; I'm sorry</div></div>
+                <div class="vc blue"><div class="vn">22</div><div class="vpy">méi guānxi</div><div class="vzh">没关系</div><div class="ven">that's all right; never mind</div></div>
+                <div class="vc blue" style="grid-column:1/-1;max-width:260px;margin:0 auto;"><div class="vn">23</div><div class="vpy">méishì</div><div class="vzh">没事</div><div class="vpos blue">v.</div><div class="ven">it doesn't matter; no worries</div></div>
+            </div>
+            <div class="xtip" style="max-width:560px;margin-top:14px;"><span>💡</span><span>In casual speech, people also say <strong>没事 méishì</strong> instead of 没关系 to mean "it's fine" or "no worries".</span></div>
+        </div>
+
+        <!-- 17. L2 VOCAB 12–15 -->
+        <div class="slide" id="slide-17">
+            <div class="tag blue">📝 生词 <span class="tag-en">New Words · 24–27</span></div>
+            <div class="vocab-grid cols2" style="max-width:520px;">
+                <div class="vc blue"><div class="vn">24</div><div class="vpy">hěn</div><div class="vzh">很</div><div class="vpos blue">adv.</div><div class="ven">very</div></div>
+                <div class="vc blue"><div class="vn">25</div><div class="vpy">gāoxìng</div><div class="vzh">高兴</div><div class="vpos blue">adj.</div><div class="ven">glad; happy</div></div>
+                <div class="vc blue"><div class="vn">26</div><div class="vpy">rènshi</div><div class="vzh">认识</div><div class="vpos blue">v.</div><div class="ven">know; be acquainted with</div></div>
+                <div class="vc blue"><div class="vn">27</div><div class="vpy">yě</div><div class="vzh">也</div><div class="vpos blue">adv.</div><div class="ven">also; too</div></div>
+            </div>
+        </div>
+
+        <!-- 18. GRAMMAR: WORD ORDER -->
+        <div class="slide" id="slide-18">
+            <div class="tag blue">💡 语言点 <span class="tag-en">Language Point · Basic Word Order</span></div>
+            <div class="grammar-box">
+                <div class="lp-title" style="color:var(--blue);">汉语的基本语序 Basic Word Order in Chinese</div>
+                <div class="lp-sub">汉语语序：主语 + 谓语 + 宾语 &nbsp;|&nbsp; Chinese: Subject + Predicate + Object</div>
+                <div class="svo">
+                    <div>
+                        <div class="svo-block s">主语<br><small>Subject</small></div>
+                    </div>
+                    <div class="svo-arrow">+</div>
+                    <div>
+                        <div class="svo-block v">谓语<br><small>Predicate</small></div>
+                    </div>
+                    <div class="svo-arrow">+</div>
+                    <div>
+                        <div class="svo-block o">宾语<br><small>Object</small></div>
+                    </div>
+                </div>
+                <div class="eg-row"><span class="eg-s">我</span><span class="eg-v">叫</span><span class="eg-o">陈天中</span><span class="eg-en">My name is Chen Tianzhong.</span></div>
+                <div class="eg-row" style="margin-top:6px;"><span class="eg-s">你</span><span class="eg-v">叫</span><span class="eg-o">什么名字</span><span class="eg-en">What's your name?</span></div>
+                <div class="eg-row" style="margin-top:6px;"><span class="eg-s">我</span><span class="eg-v">是</span><span class="eg-o">学生</span><span class="eg-en">I am a student.</span></div>
+            </div>
+        </div>
+
+        <!-- 19. CULTURE: CHINESE NAMES -->
+        <div class="slide" id="slide-19">
+            <div class="tag blue">🌏 文化拓展 <span class="tag-en">Culture · Chinese Name Structure</span></div>
+            <div class="name-box">
+                <div class="lp-title">中国人的姓名 · Chinese Names</div>
+                <div class="lp-sub">中国人名字的顺序是：姓 + 名 (Family name first, then given name)</div>
+                <div class="name-structure">
+                    <div class="name-part surname"><div class="np-label">姓 Surname</div><div class="np-zh">李</div><div class="np-en">Family name · comes first</div></div>
+                    <div class="name-plus">+</div>
+                    <div class="name-part given"><div class="np-label">名 Given name</div><div class="np-zh">文</div><div class="np-en">Personal name · comes after</div></div>
+                </div>
+                <div class="name-examples">
+                    <div class="name-eg">
+                        <div class="ne-full" style="color:var(--red);">李文</div>
+                        <div class="ne-parts">姓李 + 名文</div>
+                        <div class="ne-en">Lǐ Wén</div>
+                    </div>
+                    <div class="name-eg">
+                        <div class="ne-full" style="color:var(--blue);">陈天中</div>
+                        <div class="ne-parts">姓陈 + 名天中</div>
+                        <div class="ne-en">Chén Tiānzhōng</div>
+                    </div>
+                    <div class="name-eg">
+                        <div class="ne-full" style="color:var(--green);">白家月</div>
+                        <div class="ne-parts">姓白 + 名家月</div>
+                        <div class="ne-en">Bái Jiāyuè</div>
+                    </div>
+                </div>
+                <div class="note" style="margin-top:12px;"><span>💡</span><span>In English, Chinese people often reverse the order: Li Wen → Wen Li. In Chinese contexts, always write the surname first.</span></div>
+            </div>
+        </div>
+
+        <!-- 20. TONGUE TWISTERS -->
+        <div class="slide" id="slide-20">
+            <div class="tag">👅 绕口令 <span class="tag-en">Tongue Twisters — Lessons 1 & 2</span></div>
+            <div class="tw-box">
+                <div class="tw-label">🎵 READ ALOUD — FASTER AND FASTER!</div>
+                <div class="tw-section">
+                    <div class="tw-lesson">Lesson 1</div>
+                    <div class="tw-py">Mā zhòng má, wǒ fàng mǎ.</div>
+                    <div class="tw-zh">妈种麻，我放马。</div>
+                    <div class="tw-en">Mom plants flax. I tend the horse.</div>
+                    <div class="tw-py" style="margin-top:6px;">Mǎ chī má, māma mà mǎ.</div>
+                    <div class="tw-zh">马吃麻，妈骂马。</div>
+                    <div class="tw-en">The horse eats the flax. Mom scolds the horse.</div>
+                </div>
+                <div class="tw-divider"></div>
+                <div class="tw-section">
+                    <div class="tw-lesson">Lesson 2</div>
+                    <div class="tw-py">Qī jiā yī, zài jiǎn yī, jiāwán jiǎnwán děngyú jǐ?</div>
+                    <div class="tw-zh">七加一，再减一，加完减完等于几？</div>
+                    <div class="tw-py" style="margin-top:4px;">Jiāwán jiǎnwán hái shì qī.</div>
+                    <div class="tw-zh">加完减完还是七。</div>
+                    <div class="tw-en">Seven plus one, minus one again. Add it up, take it down. Still just seven!</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 21. CULTURE CORNER -->
+        <div class="slide" id="slide-21">
+            <div class="tag">🎋 文化拓展 <span class="tag-en">Culture Corner — Greetings & Etiquette</span></div>
+            <div class="culture-box">
+                <div class="culture-title"><span>🌏</span> Chinese Communication Etiquette</div>
+                <div class="culture-grid">
+                    <div class="cp"><div class="cp-title">🤝 Handshakes</div><div class="cp-text">Common in formal settings. A brief, light handshake is standard — not too firm.</div></div>
+                    <div class="cp"><div class="cp-title">🙏 Nodding</div><div class="cp-text">A slight nod shows respect — very common in everyday greetings and acknowledgment.</div></div>
+                    <div class="cp blue"><div class="cp-title">📛 Use Titles</div><div class="cp-text">Address people as title + surname: 王老师, 陈先生. Using only a first name can seem rude.</div></div>
+                    <div class="cp blue"><div class="cp-title">👴 Elders First</div><div class="cp-text">Greet the oldest person in the group first. It shows respect for seniority in Chinese culture.</div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 22. QUIZ -->
+        <div class="slide" id="slide-22">
+            <div class="tag">✏️ 词汇测验 <span class="tag-en">Combined Quiz — Lessons 1 & 2</span></div>
+            <div class="quiz-wrap">
+                <div class="qprog" id="qProg">Question 1 of 6</div>
+                <div class="qq" id="qQ"></div>
+                <div class="qhint" id="qHint"></div>
+                <div class="qopts" id="qOpts"></div>
+                <div class="qfb" id="qFb"></div>
+                <button class="qnxt" id="qNxt" onclick="nextQ()">Next →</button>
+            </div>
+        </div>
+
+        <!-- 23. CONVERSATION PRACTICE -->
+        <div class="slide" id="slide-23">
+            <div class="tag">🗣️ 会话练习 <span class="tag-en">Conversation Practice</span></div>
+            <div class="practice-box">
+                <div class="pitem"><div class="picon">👥</div><div><div class="ptitle">Greet your teacher</div><div class="psub">Student → teacher: <strong>老师，您好！</strong>&nbsp;/ Teacher → class: <strong>大家好！</strong></div></div></div>
+                <div class="pitem"><div class="picon">🙋</div><div><div class="ptitle">Introduce yourself</div><div class="psub"><strong>请问，你叫什么名字？</strong><br>→ <strong>我叫＿＿。很高兴认识你！</strong></div></div></div>
+                <div class="pitem"><div class="picon">😅</div><div><div class="ptitle">Apologize and respond</div><div class="psub">A: <strong>对不起！</strong> → B: <strong>没关系！</strong> / <strong>没事！</strong></div></div></div>
+                <div class="pitem"><div class="picon">👋</div><div><div class="ptitle">Say goodbye</div><div class="psub"><strong>谢谢！不客气！同学们，再见！老师，再见！</strong></div></div></div>
+            </div>
+        </div>
+
+        <!-- 24. SUMMARY -->
+        <div class="slide" id="slide-24">
+            <div class="tag">🌟 课堂小结 <span class="tag-en">Lesson Summary — All Key Phrases</span></div>
+            <div class="summary-grid">
+                <div class="si"><div class="si-py">nǐ hǎo</div><div class="si-zh">你好</div><div class="si-en">Hello</div></div>
+                <div class="si"><div class="si-py">nín hǎo</div><div class="si-zh">您好</div><div class="si-en">Hello (formal)</div></div>
+                <div class="si"><div class="si-py">dàjiā hǎo</div><div class="si-zh">大家好</div><div class="si-en">Hello everyone</div></div>
+                <div class="si"><div class="si-py">xièxie</div><div class="si-zh">谢谢</div><div class="si-en">Thank you</div></div>
+                <div class="si"><div class="si-py">bú kèqi</div><div class="si-zh">不客气</div><div class="si-en">You're welcome</div></div>
+                <div class="si"><div class="si-py">zàijiàn</div><div class="si-zh">再见</div><div class="si-en">Goodbye</div></div>
+                <div class="si blue"><div class="si-py">qǐngwèn</div><div class="si-zh">请问</div><div class="si-en">Excuse me</div></div>
+                <div class="si blue"><div class="si-py">wǒ jiào…</div><div class="si-zh">我叫…</div><div class="si-en">My name is…</div></div>
+                <div class="si blue"><div class="si-py">nǐ jiào shénme</div><div class="si-zh">你叫什么？</div><div class="si-en">What's your name?</div></div>
+                <div class="si blue"><div class="si-py">duìbuqǐ</div><div class="si-zh">对不起</div><div class="si-en">Sorry</div></div>
+                <div class="si blue"><div class="si-py">méi guānxi</div><div class="si-zh">没关系</div><div class="si-en">Never mind</div></div>
+                <div class="si blue"><div class="si-py">hěn gāoxìng</div><div class="si-zh">很高兴</div><div class="si-en">Nice to meet you</div></div>
+            </div>
+            <div class="congrats">
+                <div class="cg-emoji">🎉</div>
+                <div class="cg-title">第一、二课完成！Lessons 1 & 2 Complete!</div>
+                <div class="cg-sub">You can now greet, introduce yourself, and apologize in Chinese!</div>
+            </div>
+        </div>
+
+    </div><!-- end slides-wrapper -->
+
+    <div class="nav">
+        <button class="nav-btn" id="prevBtn" onclick="go(-1)" disabled>← 上一页</button>
+        <div class="nav-dots" id="navDots"></div>
+        <button class="nav-btn" id="nextBtn" onclick="go(1)">下一页 →</button>
+    </div>
+
+</div>
+
+<script>
+const TOTAL = 24;
+const PART2_START = 11; // slides 11+ are part 2
+let cur = 1;
+
+// Build dots
+const dotsEl = document.getElementById('navDots');
+for (let i = 1; i <= TOTAL; i++) {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i >= PART2_START ? ' part2' : '') + (i === 1 ? ' active' : '');
+    d.onclick = () => goTo(i);
+    dotsEl.appendChild(d);
+}
+
+function updateUI() {
+    document.getElementById('slideCounter').textContent = cur + ' / ' + TOTAL;
+    document.getElementById('progressFill').style.width = (cur / TOTAL * 100) + '%';
+    document.getElementById('prevBtn').disabled = cur === 1;
+    document.getElementById('nextBtn').disabled = cur === TOTAL;
+    document.querySelectorAll('.dot').forEach((d, i) => {
+        d.classList.toggle('active', i + 1 === cur);
+    });
+}
+
+function goTo(n) {
+    if (n === cur) return;
+    const prev = document.getElementById('slide-' + cur);
+    prev.classList.remove('active');
+    prev.classList.add('exit');
+    setTimeout(() => prev.classList.remove('exit'), 400);
+    cur = n;
+    document.getElementById('slide-' + cur).classList.add('active');
+    updateUI();
+}
+
+function go(dir) {
+    const n = cur + dir;
+    if (n >= 1 && n <= TOTAL) goTo(n);
+}
+
+document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') go(1);
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') go(-1);
+});
+
+// ── Quiz ──
+const questions = [
+    { q: '什么意思？What does this mean?', hint: '谢谢 xièxie', opts: ['Goodbye','Sorry','Thank you','Hello'], ans: 2 },
+    { q: 'Which pronoun is formal/respectful?', hint: 'Honorific "you"', opts: ['你 nǐ','他 tā','您 nín','我 wǒ'], ans: 2 },
+    { q: 'How do you apologize in Chinese?', hint: '', opts: ['没关系','对不起','不客气','谢谢'], ans: 1 },
+    { q: 'What is the correct word order?', hint: 'Subject + ? + Object', opts: ['Object+Subject+Predicate','Subject+Object+Predicate','Subject+Predicate+Object','Predicate+Subject+Object'], ans: 2 },
+    { q: 'In a Chinese name, what comes FIRST?', hint: '姓名结构', opts: ['Given name','Surname (family name)','Title','Nickname'], ans: 1 },
+    { q: 'How do you say "Nice to meet you"?', hint: '', opts: ['再见！','很高兴认识你。','对不起！','大家好！'], ans: 1 },
+];
+let qi = 0, answered = false;
+
+function renderQ() {
+    const q = questions[qi];
+    document.getElementById('qProg').textContent = 'Question ' + (qi + 1) + ' of ' + questions.length;
+    document.getElementById('qQ').textContent = q.q;
+    document.getElementById('qHint').textContent = q.hint;
+    document.getElementById('qFb').textContent = '';
+    document.getElementById('qNxt').style.display = 'none';
+    const el = document.getElementById('qOpts');
+    el.innerHTML = '';
+    q.opts.forEach((o, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'qbtn';
+        btn.textContent = o;
+        btn.onclick = () => pick(btn, i);
+        el.appendChild(btn);
+    });
+    answered = false;
+}
+
+function pick(btn, i) {
+    if (answered) return;
+    answered = true;
+    const ans = questions[qi].ans;
+    document.querySelectorAll('.qbtn').forEach((b, j) => {
+        b.disabled = true;
+        if (j === ans) b.classList.add('correct');
+    });
+    const fb = document.getElementById('qFb');
+    if (i === ans) { fb.textContent = '✅ Correct! Well done!'; fb.style.color = '#27AE60'; }
+    else { btn.classList.add('wrong'); fb.textContent = '❌ Not quite — see the highlighted answer.'; fb.style.color = '#E74C3C'; }
+    const nxt = document.getElementById('qNxt');
+    nxt.style.display = 'inline-block';
+    if (qi >= questions.length - 1) { nxt.textContent = '查看总结 →'; nxt.onclick = () => goTo(24); }
+    else { nxt.textContent = 'Next →'; }
+}
+
+function nextQ() { if (qi < questions.length - 1) { qi++; renderQ(); } }
+
+renderQ();
+updateUI();
+</script>
+</body>
+</html>
