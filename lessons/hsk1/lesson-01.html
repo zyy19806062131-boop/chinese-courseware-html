@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新HSK教程1 · 第一课：AI小语，你好！</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --red: #C0392B;
+            --red-dark: #962d22;
+            --orange: #E67E22;
+            --white: #FFFFFF;
+            --bg: #F4F6F8;
+            --text: #2C3E50;
+            --muted: #7F8C8D;
+            --pinyin: #C0392B;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .presentation {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .header {
+            background: var(--red);
+            color: white;
+            padding: 10px 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+        .header-title { font-size: 15px; font-weight: 500; letter-spacing: 1px; opacity: 0.95; }
+        .slide-counter { font-size: 13px; opacity: 0.8; }
+
+        /* Progress */
+        .progress-bar { height: 3px; background: rgba(255,255,255,0.25); flex-shrink: 0; }
+        .progress-fill { height: 100%; background: white; transition: width 0.35s ease; }
+
+        /* Slide area */
+        .slides-wrapper { flex: 1; overflow: hidden; position: relative; }
+
+        .slide {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 28px 48px;
+            opacity: 0;
+            transform: translateX(50px);
+            transition: opacity 0.38s ease, transform 0.38s ease;
+            pointer-events: none;
+        }
+        .slide.active { opacity: 1; transform: translateX(0); pointer-events: all; }
+        .slide.exit { opacity: 0; transform: translateX(-50px); }
+
+        /* Navigation */
+        .nav {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 14px;
+            padding: 12px 20px;
+            background: white;
+            border-top: 1px solid #E8ECF0;
+            flex-shrink: 0;
+        }
+        .nav-btn {
+            background: var(--red);
+            color: white;
+            border: none;
+            padding: 9px 26px;
+            border-radius: 22px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-family: inherit;
+            font-weight: 500;
+        }
+        .nav-btn:hover { background: var(--red-dark); }
+        .nav-btn:disabled { background: #C8CDD2; cursor: not-allowed; }
+        .nav-dots { display: flex; gap: 5px; flex-wrap: wrap; justify-content: center; max-width: 300px; }
+        .dot {
+            width: 7px; height: 7px; border-radius: 50%;
+            background: #C8CDD2; cursor: pointer; transition: background 0.2s;
+        }
+        .dot.active { background: var(--red); }
+
+        /* ── Shared Components ── */
+        .section-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            background: var(--red);
+            color: white;
+            padding: 5px 16px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 22px;
+            letter-spacing: 0.5px;
+        }
+        .section-tag-en { font-size: 12px; opacity: 0.85; font-weight: 400; }
+
+        /* ── COVER ── */
+        .slide-cover { background: linear-gradient(140deg, #C0392B 0%, #7B241C 100%); color: white; }
+        .cover-lesson { font-size: 13px; letter-spacing: 5px; opacity: 0.75; text-transform: uppercase; margin-bottom: 6px; }
+        .cover-pinyin { font-size: 22px; opacity: 0.88; letter-spacing: 4px; margin-bottom: 8px; }
+        .cover-title-zh { font-size: 58px; font-weight: 700; margin-bottom: 10px; text-shadow: 0 2px 12px rgba(0,0,0,0.2); }
+        .cover-title-en { font-size: 22px; font-weight: 300; opacity: 0.82; margin-bottom: 36px; }
+        .cover-badge {
+            background: rgba(255,255,255,0.18);
+            border: 1.5px solid rgba(255,255,255,0.45);
+            color: white;
+            padding: 7px 22px;
+            border-radius: 20px;
+            font-size: 14px;
+            letter-spacing: 2px;
+        }
+        .cover-deco {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.05);
+        }
+
+        /* ── OBJECTIVES ── */
+        .obj-card {
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+            background: white;
+            border-left: 4px solid var(--red);
+            padding: 18px 22px;
+            border-radius: 0 10px 10px 0;
+            margin-bottom: 14px;
+            width: 100%;
+            max-width: 680px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+        }
+        .obj-icon { font-size: 26px; flex-shrink: 0; }
+        .obj-zh { font-size: 17px; font-weight: 600; margin-bottom: 6px; line-height: 1.5; }
+        .obj-en { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+        /* ── DIALOGUE ── */
+        .scene-desc {
+            font-size: 13px; color: var(--muted); text-align: center;
+            margin-bottom: 24px; font-style: italic;
+            max-width: 580px; line-height: 1.6;
+        }
+        .dialogue { display: flex; flex-direction: column; gap: 14px; width: 100%; max-width: 580px; }
+        .dl { display: flex; align-items: flex-start; gap: 12px; }
+        .dl.r { flex-direction: row-reverse; }
+        .avatar {
+            width: 44px; height: 44px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-size: 18px; font-weight: 700; flex-shrink: 0;
+        }
+        .bubble {
+            background: white;
+            border-radius: 12px;
+            padding: 12px 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+            max-width: 380px;
+        }
+        .dl.r .bubble { background: #FEF5F5; border: 1px solid #F5C6C2; }
+        .spk { font-size: 11px; color: var(--muted); margin-bottom: 3px; }
+        .bpy { font-size: 13px; color: var(--pinyin); letter-spacing: 1px; margin-bottom: 3px; }
+        .bzh { font-size: 24px; font-weight: 700; margin-bottom: 3px; }
+        .ben { font-size: 13px; color: var(--muted); font-style: italic; }
+
+        /* ── VOCABULARY ── */
+        .vocab-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; width: 100%; max-width: 680px; }
+        .vocab-card {
+            background: white; border-radius: 12px; padding: 18px 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+            border-top: 3px solid var(--red);
+            position: relative;
+        }
+        .vnum {
+            position: absolute; top: 10px; right: 12px;
+            font-size: 11px; color: var(--muted);
+            background: #F0F2F5; width: 20px; height: 20px;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+        }
+        .vpy { font-size: 14px; color: var(--pinyin); letter-spacing: 2px; margin-bottom: 4px; }
+        .vzh { font-size: 34px; font-weight: 700; margin-bottom: 6px; }
+        .vpos {
+            font-size: 10px; color: white; background: var(--orange);
+            padding: 2px 7px; border-radius: 8px; display: inline-block; margin-bottom: 5px;
+        }
+        .ven { font-size: 14px; color: var(--muted); }
+
+        /* ── LANGUAGE POINT ── */
+        .tip-box {
+            background: white; border-radius: 12px;
+            padding: 24px 28px; max-width: 660px; width: 100%;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+        }
+        .tip-title { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+        .tip-sub { font-size: 13px; color: var(--muted); margin-bottom: 16px; }
+        .tip-compare { display: flex; gap: 16px; align-items: stretch; margin-bottom: 16px; }
+        .tip-item {
+            flex: 1; background: #F7F9FC; border-radius: 8px;
+            padding: 18px; text-align: center;
+        }
+        .tip-item.hl { background: #FEF5F5; border: 2px solid var(--red); }
+        .tchar { font-size: 48px; font-weight: 700; color: var(--red); }
+        .tchar-py { font-size: 16px; color: var(--pinyin); margin-bottom: 4px; }
+        .tchar-desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
+        .vs-sep { display: flex; align-items: center; font-size: 20px; color: #C8CDD2; font-weight: 700; }
+        .tip-ex {
+            font-size: 15px; padding: 9px 12px;
+            background: #F7F9FC; border-radius: 6px;
+            border-left: 3px solid var(--red); margin-bottom: 8px;
+            display: flex; align-items: baseline; gap: 10px;
+        }
+        .tip-ex .ez { font-size: 20px; font-weight: 600; }
+        .tip-ex .ee { font-size: 13px; color: var(--muted); }
+        .note-box {
+            background: #FFFBF0; border: 1px solid #F0D070;
+            border-radius: 8px; padding: 12px 16px;
+            font-size: 13px; color: #7D6608; line-height: 1.5;
+            display: flex; gap: 8px; align-items: flex-start; margin-top: 12px;
+        }
+
+        /* ── 们 GRID ── */
+        .men-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin: 14px 0; }
+        .men-item {
+            background: #F7F9FC; border-radius: 8px;
+            padding: 14px; text-align: center;
+        }
+        .men-py { font-size: 12px; color: var(--pinyin); margin-bottom: 4px; }
+        .men-zh { font-size: 24px; font-weight: 700; margin-bottom: 4px; }
+        .men-en { font-size: 12px; color: var(--muted); }
+
+        /* ── TONGUE TWISTER ── */
+        .twister-box {
+            background: linear-gradient(135deg, #FFF8F0, #FFF0E0);
+            border: 2px solid #F0C060;
+            border-radius: 16px; padding: 28px 36px;
+            max-width: 600px; width: 100%; text-align: center;
+        }
+        .tw-label { font-size: 13px; color: #E67E22; font-weight: 600; letter-spacing: 2px; margin-bottom: 18px; }
+        .tw-line { margin-bottom: 14px; }
+        .tw-py { font-size: 15px; color: var(--pinyin); letter-spacing: 2px; margin-bottom: 3px; }
+        .tw-zh { font-size: 32px; font-weight: 700; margin-bottom: 3px; }
+        .tw-en { font-size: 14px; color: var(--muted); font-style: italic; }
+        .tw-divider { height: 1px; background: #F0D070; margin: 12px 0; }
+        .tone-tip { font-size: 13px; color: var(--muted); margin-top: 14px; }
+
+        /* ── CULTURE ── */
+        .culture-box {
+            background: white; border-radius: 12px;
+            padding: 24px 28px; max-width: 680px; width: 100%;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+        }
+        .culture-title { font-size: 20px; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+        .culture-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; }
+        .culture-point {
+            background: #F7F9FC; border-radius: 8px;
+            padding: 14px 16px; border-left: 4px solid var(--red);
+        }
+        .cp-title { font-size: 15px; font-weight: 600; margin-bottom: 5px; }
+        .cp-text { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+        /* ── QUIZ ── */
+        .quiz-wrap { width: 100%; max-width: 560px; display: flex; flex-direction: column; align-items: center; }
+        .quiz-prog { font-size: 13px; color: var(--muted); margin-bottom: 12px; }
+        .quiz-q { font-size: 26px; font-weight: 700; text-align: center; margin-bottom: 6px; }
+        .quiz-hint { font-size: 14px; color: var(--pinyin); margin-bottom: 24px; letter-spacing: 1px; min-height: 20px; }
+        .quiz-opts { display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; width: 100%; }
+        .qbtn {
+            background: white; border: 2px solid #DDE1E7;
+            border-radius: 10px; padding: 16px 14px;
+            font-size: 20px; cursor: pointer;
+            transition: all 0.2s; text-align: center;
+            font-family: inherit; font-weight: 500;
+        }
+        .qbtn:hover:not(:disabled) { border-color: var(--red); background: #FEF5F5; }
+        .qbtn.correct { border-color: #27AE60; background: #EAFAF1; color: #27AE60; }
+        .qbtn.wrong { border-color: #E74C3C; background: #FDEDEC; color: #E74C3C; }
+        .quiz-fb { margin-top: 16px; font-size: 17px; font-weight: 600; text-align: center; min-height: 26px; }
+        .quiz-next {
+            display: none; margin-top: 14px;
+            background: var(--red); color: white;
+            border: none; padding: 9px 26px; border-radius: 22px;
+            font-size: 14px; cursor: pointer; font-family: inherit; font-weight: 500;
+        }
+
+        /* ── PRACTICE ── */
+        .practice-box {
+            background: white; border-radius: 12px;
+            padding: 22px 28px; max-width: 600px; width: 100%;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+        }
+        .pitem {
+            display: flex; gap: 14px; align-items: flex-start;
+            padding: 12px 0; border-bottom: 1px solid #F0F2F5;
+        }
+        .pitem:last-child { border-bottom: none; }
+        .picon { font-size: 26px; flex-shrink: 0; }
+        .ptitle { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+        .psub { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+        /* ── SUMMARY ── */
+        .summary-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; max-width: 700px; width: 100%; }
+        .sitem {
+            background: white; border-radius: 10px; padding: 12px;
+            text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            border-bottom: 3px solid var(--red);
+        }
+        .spy { font-size: 11px; color: var(--pinyin); margin-bottom: 3px; }
+        .szh { font-size: 20px; font-weight: 700; margin-bottom: 3px; }
+        .sen { font-size: 11px; color: var(--muted); }
+        .congrats { text-align: center; margin-top: 22px; }
+        .congrats-emoji { font-size: 42px; margin-bottom: 8px; }
+        .congrats-title { font-size: 22px; font-weight: 700; color: var(--red); margin-bottom: 4px; }
+        .congrats-sub { font-size: 14px; color: var(--muted); }
+    </style>
+</head>
+<body>
+
+<div class="presentation">
+
+    <!-- Header -->
+    <div class="header">
+        <div class="header-title">新HSK教程1 · New HSK Course 1</div>
+        <div class="slide-counter" id="slideCounter">1 / 15</div>
+    </div>
+    <div class="progress-bar">
+        <div class="progress-fill" id="progressFill" style="width:6.67%"></div>
+    </div>
+
+    <!-- Slides -->
+    <div class="slides-wrapper">
+
+        <!-- 1. COVER -->
+        <div class="slide slide-cover active" id="slide-1">
+            <div class="cover-deco" style="width:320px;height:320px;top:-80px;right:-80px;"></div>
+            <div class="cover-deco" style="width:420px;height:420px;bottom:-120px;left:-120px;"></div>
+            <div class="cover-lesson">Lesson 1 · 第一课</div>
+            <div class="cover-pinyin">Āi Xiǎoyǔ, nǐ hǎo!</div>
+            <div class="cover-title-zh">AI小语，你好！</div>
+            <div class="cover-title-en">Hello, AI Xiaoyu!</div>
+            <div class="cover-badge">新HSK教程 · Level 1</div>
+        </div>
+
+        <!-- 2. OBJECTIVES -->
+        <div class="slide" id="slide-2" style="background:#FAFBFC;">
+            <div class="section-tag">🎯 学习目标 <span class="section-tag-en">Objectives</span></div>
+            <div class="obj-card">
+                <div class="obj-icon">💬</div>
+                <div>
+                    <div class="obj-zh">能听懂并使用礼貌用语打招呼、致谢、告别。</div>
+                    <div class="obj-en">Be able to understand and use polite expressions for greetings, thanks, and farewells.</div>
+                </div>
+            </div>
+            <div class="obj-card">
+                <div class="obj-icon">🎓</div>
+                <div>
+                    <div class="obj-zh">了解中文交际礼仪，能听懂并使用第二人称代词敬称 <strong>「您」</strong>。</div>
+                    <div class="obj-en">Understand Chinese communication etiquette, and be able to understand and use the honorific second-person pronoun "您".</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. TEXT 1 -->
+        <div class="slide" id="slide-3" style="background:#FAFBFC;">
+            <div class="section-tag">📖 课文1 <span class="section-tag-en">Text 1</span></div>
+            <div class="scene-desc">
+                开学第一天，在办公室里，王一飞和AI助教小语打招呼。<br>
+                <em>On the first day of school, in the office, Wang Yifei greets the AI assistant Xiaoyu.</em>
+            </div>
+            <div class="dialogue">
+                <div class="dl">
+                    <div class="avatar" style="background:#2980B9;">飞</div>
+                    <div class="bubble">
+                        <div class="spk">王一飞 Wáng Yīfēi</div>
+                        <div class="bpy">Āi Xiǎoyǔ, nǐ hǎo!</div>
+                        <div class="bzh">AI小语，你好！</div>
+                        <div class="ben">Hello, AI Xiaoyu!</div>
+                    </div>
+                </div>
+                <div class="dl r">
+                    <div class="avatar" style="background:#E74C3C;">语</div>
+                    <div class="bubble">
+                        <div class="spk">小语 Xiǎoyǔ</div>
+                        <div class="bpy">Wáng lǎoshī, nǐ hǎo!</div>
+                        <div class="bzh">王老师，你好！</div>
+                        <div class="ben">Hello, Ms. Wang!</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. VOCAB 1–4 -->
+        <div class="slide" id="slide-4">
+            <div class="section-tag">📝 生词 <span class="section-tag-en">New Words · 1–4</span></div>
+            <div class="vocab-grid">
+                <div class="vocab-card">
+                    <div class="vnum">1</div>
+                    <div class="vpy">nǐ hǎo</div>
+                    <div class="vzh">你好</div>
+                    <div class="ven">hello; hi</div>
+                </div>
+                <div class="vocab-card">
+                    <div class="vnum">2</div>
+                    <div class="vpy">dàjiā</div>
+                    <div class="vzh">大家</div>
+                    <div class="vpos">pron.</div>
+                    <div class="ven">everybody; everyone</div>
+                </div>
+                <div class="vocab-card">
+                    <div class="vnum">3</div>
+                    <div class="vpy">hǎo</div>
+                    <div class="vzh">好</div>
+                    <div class="vpos">adj.</div>
+                    <div class="ven">good; fine; well</div>
+                </div>
+                <div class="vocab-card">
+                    <div class="vnum">4</div>
+                    <div class="vpy">xuéshēng</div>
+                    <div class="vzh">学生</div>
+                    <div class="vpos">n.</div>
+                    <div class="ven">student</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. VOCAB 5–8 -->
+        <div class="slide" id="slide-5">
+            <div class="section-tag">📝 生词 <span class="section-tag-en">New Words · 5–8</span></div>
+            <div class="vocab-grid">
+                <div class="vocab-card">
+                    <div class="vnum">5</div>
+                    <div class="vpy">men</div>
+                    <div class="vzh">们</div>
+                    <div class="vpos">suf.</div>
+                    <div class="ven">plural suffix (people)</div>
+                </div>
+                <div class="vocab-card">
+                    <div class="vnum">6</div>
+                    <div class="vpy">lǎoshī</div>
+                    <div class="vzh">老师</div>
+                    <div class="vpos">n.</div>
+                    <div class="ven">teacher</div>
+                </div>
+                <div class="vocab-card">
+                    <div class="vnum">7</div>
+                    <div class="vpy">nín</div>
+                    <div class="vzh">您</div>
+                    <div class="vpos">pron.</div>
+                    <div class="ven">you (honorific/formal)</div>
+                </div>
+                <div class="vocab-card">
+                    <div class="vnum">8</div>
+                    <div class="vpy">nǐmen</div>
+                    <div class="vzh">你们</div>
+                    <div class="vpos">pron.</div>
+                    <div class="ven">you (plural)</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 6. TEXT 2 -->
+        <div class="slide" id="slide-6" style="background:#FAFBFC;">
+            <div class="section-tag">📖 课文2 <span class="section-tag-en">Text 2</span></div>
+            <div class="scene-desc">
+                开学第一天，课堂上，学生们学习打招呼用语。<br>
+                <em>In class on the first day, students learn greeting expressions.</em>
+            </div>
+            <div class="dialogue">
+                <div class="dl">
+                    <div class="avatar" style="background:#2980B9;">飞</div>
+                    <div class="bubble">
+                        <div class="spk">王一飞</div>
+                        <div class="bpy">Dàjiā hǎo!</div>
+                        <div class="bzh">大家好！</div>
+                        <div class="ben">Hello, everyone!</div>
+                    </div>
+                </div>
+                <div class="dl r">
+                    <div class="avatar" style="background:#27AE60;">生</div>
+                    <div class="bubble">
+                        <div class="spk">学生们</div>
+                        <div class="bpy">Lǎoshī, nín hǎo!</div>
+                        <div class="bzh">老师，<span style="color:var(--red);">您</span>好！</div>
+                        <div class="ben">Hello, teacher! (formal)</div>
+                    </div>
+                </div>
+                <div class="dl">
+                    <div class="avatar" style="background:#E74C3C;">语</div>
+                    <div class="bubble">
+                        <div class="spk">小语</div>
+                        <div class="bpy">Nǐmen hǎo!</div>
+                        <div class="bzh">你们好！</div>
+                        <div class="ben">Hello, all of you!</div>
+                    </div>
+                </div>
+                <div class="dl r">
+                    <div class="avatar" style="background:#27AE60;">生</div>
+                    <div class="bubble">
+                        <div class="spk">学生们</div>
+                        <div class="bpy">Nǐ hǎo, Xiǎoyǔ!</div>
+                        <div class="bzh">你好，小语！</div>
+                        <div class="ben">Hello, Xiaoyu!</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 7. LANGUAGE POINT — 您 -->
+        <div class="slide" id="slide-7">
+            <div class="section-tag">💡 语言点 <span class="section-tag-en">Language Point · Honorific 您</span></div>
+            <div class="tip-box">
+                <div class="tip-title">您 vs 你 — Two ways to say "you"</div>
+                <div class="tip-sub">Both mean "you", but they carry different levels of formality.</div>
+                <div class="tip-compare">
+                    <div class="tip-item">
+                        <div class="tchar-py">nǐ</div>
+                        <div class="tchar">你</div>
+                        <div class="tchar-desc">Casual / informal<br>Friends, classmates, peers</div>
+                    </div>
+                    <div class="vs-sep">VS</div>
+                    <div class="tip-item hl">
+                        <div class="tchar-py">nín</div>
+                        <div class="tchar">您</div>
+                        <div class="tchar-desc">Formal / respectful<br>Teachers, elders, strangers</div>
+                    </div>
+                </div>
+                <div class="tip-ex"><span class="ez" style="color:#2980B9;">老师，您好！</span><span class="ee">Hello, teacher! (respectful ✓)</span></div>
+                <div class="tip-ex"><span class="ez">朋友，你好！</span><span class="ee">Hello, friend! (casual ✓)</span></div>
+            </div>
+        </div>
+
+        <!-- 8. VOCAB 9–12 -->
+        <div class="slide" id="slide-8">
+            <div class="section-tag">📝 生词 <span class="section-tag-en">New Words · 9–12</span></div>
+            <div class="vocab-grid">
+                <div class="vocab-card">
+                    <div class="vnum">9</div>
+                    <div class="vpy">xièxie</div>
+                    <div class="vzh">谢谢</div>
+                    <div class="vpos">v.</div>
+                    <div class="ven">thank you; thanks</div>
+                </div>
+                <div class="vocab-card">
+                    <div class="vnum">10</div>
+                    <div class="vpy">bú kèqi</div>
+                    <div class="vzh">不客气</div>
+                    <div class="ven">you're welcome</div>
+                </div>
+                <div class="vocab-card">
+                    <div class="vnum">11</div>
+                    <div class="vpy">tóngxué</div>
+                    <div class="vzh">同学</div>
+                    <div class="vpos">n.</div>
+                    <div class="ven">classmate; schoolmate</div>
+                </div>
+                <div class="vocab-card">
+                    <div class="vnum">12</div>
+                    <div class="vpy">zàijiàn</div>
+                    <div class="vzh">再见</div>
+                    <div class="vpos">v.</div>
+                    <div class="ven">goodbye; see you</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 9. TEXT 3 -->
+        <div class="slide" id="slide-9" style="background:#FAFBFC;">
+            <div class="section-tag">📖 课文3 <span class="section-tag-en">Text 3</span></div>
+            <div class="scene-desc">
+                开学第一天，课堂上，学生们学习致谢、告别语。<br>
+                <em>Students learn expressions of gratitude and farewell.</em>
+            </div>
+            <div class="dialogue">
+                <div class="dl r">
+                    <div class="avatar" style="background:#27AE60;">生</div>
+                    <div class="bubble">
+                        <div class="spk">学生们</div>
+                        <div class="bpy">Xièxie!</div>
+                        <div class="bzh">谢谢！</div>
+                        <div class="ben">Thank you!</div>
+                    </div>
+                </div>
+                <div class="dl">
+                    <div class="avatar" style="background:#E74C3C;">语</div>
+                    <div class="bubble">
+                        <div class="spk">小语</div>
+                        <div class="bpy">Bú kèqi!</div>
+                        <div class="bzh">不客气！</div>
+                        <div class="ben">You're welcome!</div>
+                    </div>
+                </div>
+                <div class="dl">
+                    <div class="avatar" style="background:#2980B9;">飞</div>
+                    <div class="bubble">
+                        <div class="spk">王一飞</div>
+                        <div class="bpy">Tóngxuémen, zàijiàn!</div>
+                        <div class="bzh">同学们，再见！</div>
+                        <div class="ben">Goodbye, class!</div>
+                    </div>
+                </div>
+                <div class="dl r">
+                    <div class="avatar" style="background:#27AE60;">生</div>
+                    <div class="bubble">
+                        <div class="spk">学生们</div>
+                        <div class="bpy">Lǎoshī, zàijiàn!</div>
+                        <div class="bzh">老师，再见！</div>
+                        <div class="ben">Goodbye, teacher!</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 10. LANGUAGE POINT — 们 -->
+        <div class="slide" id="slide-10">
+            <div class="section-tag">💡 语言点 <span class="section-tag-en">Language Point · Plural Suffix 们</span></div>
+            <div class="tip-box">
+                <div class="tip-title">们 — Making Words Plural</div>
+                <div class="tip-sub">Add 们 (men) after pronouns or nouns for people to make them plural.</div>
+                <div class="men-grid">
+                    <div class="men-item">
+                        <div class="men-py">nǐ → nǐmen</div>
+                        <div class="men-zh">你 → 你们</div>
+                        <div class="men-en">you → you (plural)</div>
+                    </div>
+                    <div class="men-item">
+                        <div class="men-py">tā → tāmen</div>
+                        <div class="men-zh">他 → 他们</div>
+                        <div class="men-en">he → they</div>
+                    </div>
+                    <div class="men-item">
+                        <div class="men-py">tóngxué → tóngxuémen</div>
+                        <div class="men-zh">同学 → 同学们</div>
+                        <div class="men-en">classmate → classmates</div>
+                    </div>
+                </div>
+                <div class="note-box">
+                    <span>⚠️</span>
+                    <span><strong>Note:</strong> 们 is only used with people. You can say 学生们 (students) but <em>not</em> 书们 for books.</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 11. TONGUE TWISTER -->
+        <div class="slide" id="slide-11">
+            <div class="section-tag">👅 绕口令 <span class="section-tag-en">Tongue Twister</span></div>
+            <div class="twister-box">
+                <div class="tw-label">🎵 READ ALOUD — FASTER AND FASTER!</div>
+                <div class="tw-line">
+                    <div class="tw-py">Mā zhòng má, wǒ fàng mǎ.</div>
+                    <div class="tw-zh">妈种麻，我放马。</div>
+                    <div class="tw-en">Mom plants flax. I tend the horse.</div>
+                </div>
+                <div class="tw-divider"></div>
+                <div class="tw-line">
+                    <div class="tw-py">Mǎ chī má, māma mà mǎ.</div>
+                    <div class="tw-zh">马吃麻，妈骂马。</div>
+                    <div class="tw-en">The horse eats the flax. Mom scolds the horse.</div>
+                </div>
+            </div>
+            <div class="tone-tip">💡 Tone focus: mā (1st) · má (2nd) · mǎ (3rd) · mà (4th)</div>
+        </div>
+
+        <!-- 12. CULTURE -->
+        <div class="slide" id="slide-12">
+            <div class="section-tag">🌏 文化拓展 <span class="section-tag-en">Culture Corner</span></div>
+            <div class="culture-box">
+                <div class="culture-title"><span>🎋</span> Chinese Greeting Etiquette</div>
+                <div class="culture-grid">
+                    <div class="culture-point">
+                        <div class="cp-title">🤝 Handshakes</div>
+                        <div class="cp-text">Common in formal settings. A brief, light handshake is the norm — not too firm.</div>
+                    </div>
+                    <div class="culture-point">
+                        <div class="cp-title">🙏 Nodding</div>
+                        <div class="cp-text">A slight nod shows respect and acknowledgment — very common in everyday greetings.</div>
+                    </div>
+                    <div class="culture-point">
+                        <div class="cp-title">👴 Elders First</div>
+                        <div class="cp-text">Always greet the oldest person in the group first — it shows respect for seniority.</div>
+                    </div>
+                    <div class="culture-point">
+                        <div class="cp-title">📛 Use Titles</div>
+                        <div class="cp-text">Address people as title + surname: 王老师, 李经理. Using first names alone can seem rude.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 13. QUIZ -->
+        <div class="slide" id="slide-13">
+            <div class="section-tag">✏️ 词汇测验 <span class="section-tag-en">Vocabulary Quiz</span></div>
+            <div class="quiz-wrap">
+                <div class="quiz-prog" id="qProg">Question 1 of 5</div>
+                <div class="quiz-q" id="qText">What does 再见 mean?</div>
+                <div class="quiz-hint" id="qHint">zàijiàn</div>
+                <div class="quiz-opts" id="qOpts"></div>
+                <div class="quiz-fb" id="qFb"></div>
+                <button class="quiz-next" id="qNext" onclick="nextQ()">Next →</button>
+            </div>
+        </div>
+
+        <!-- 14. CONVERSATION PRACTICE -->
+        <div class="slide" id="slide-14">
+            <div class="section-tag">🗣️ 会话练习 <span class="section-tag-en">Conversation Practice</span></div>
+            <div class="practice-box">
+                <div class="pitem">
+                    <div class="picon">👥</div>
+                    <div>
+                        <div class="ptitle">Role-play: Greet your teacher</div>
+                        <div class="psub">Student A is the teacher. Student B greets: <strong>老师，您好！</strong></div>
+                    </div>
+                </div>
+                <div class="pitem">
+                    <div class="picon">🌐</div>
+                    <div>
+                        <div class="ptitle">Use each other's real names</div>
+                        <div class="psub">[Name]，你好！→ [Your Name]，你好！</div>
+                    </div>
+                </div>
+                <div class="pitem">
+                    <div class="picon">🙏</div>
+                    <div>
+                        <div class="ptitle">Thank and say goodbye</div>
+                        <div class="psub">A: 谢谢！ → B: 不客气！ → A: 再见！ → B: 再见！</div>
+                    </div>
+                </div>
+                <div class="pitem">
+                    <div class="picon">🎭</div>
+                    <div>
+                        <div class="ptitle">Challenge: Full class greeting</div>
+                        <div class="psub">Teacher: 大家好！→ Class: 老师，您好！→ Teacher: 同学们，再见！</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 15. SUMMARY -->
+        <div class="slide" id="slide-15">
+            <div class="section-tag">🌟 课堂小结 <span class="section-tag-en">Lesson Summary</span></div>
+            <div class="summary-grid">
+                <div class="sitem"><div class="spy">nǐ hǎo</div><div class="szh">你好</div><div class="sen">Hello</div></div>
+                <div class="sitem"><div class="spy">dàjiā hǎo</div><div class="szh">大家好</div><div class="sen">Hello, everyone</div></div>
+                <div class="sitem"><div class="spy">nín hǎo</div><div class="szh">您好</div><div class="sen">Hello (formal)</div></div>
+                <div class="sitem"><div class="spy">nǐmen hǎo</div><div class="szh">你们好</div><div class="sen">Hello (plural)</div></div>
+                <div class="sitem"><div class="spy">xièxie</div><div class="szh">谢谢</div><div class="sen">Thank you</div></div>
+                <div class="sitem"><div class="spy">bú kèqi</div><div class="szh">不客气</div><div class="sen">You're welcome</div></div>
+                <div class="sitem"><div class="spy">zàijiàn</div><div class="szh">再见</div><div class="sen">Goodbye</div></div>
+                <div class="sitem" style="border-bottom-color:var(--orange);">
+                    <div class="spy">nín / nǐ</div><div class="szh">您 / 你</div><div class="sen">formal / casual</div>
+                </div>
+            </div>
+            <div class="congrats">
+                <div class="congrats-emoji">🎉</div>
+                <div class="congrats-title">第一课完成！Lesson 1 Complete!</div>
+                <div class="congrats-sub">You can now greet, thank, and say goodbye in Chinese.</div>
+            </div>
+        </div>
+
+    </div><!-- end slides-wrapper -->
+
+    <!-- Nav -->
+    <div class="nav">
+        <button class="nav-btn" id="prevBtn" onclick="go(-1)" disabled>← 上一页</button>
+        <div class="nav-dots" id="navDots"></div>
+        <button class="nav-btn" id="nextBtn" onclick="go(1)">下一页 →</button>
+    </div>
+
+</div><!-- end presentation -->
+
+<script>
+const TOTAL = 15;
+let cur = 1;
+
+// Build dots
+const dotsEl = document.getElementById('navDots');
+for (let i = 1; i <= TOTAL; i++) {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === 1 ? ' active' : '');
+    d.onclick = () => goTo(i);
+    dotsEl.appendChild(d);
+}
+
+function updateUI() {
+    document.getElementById('slideCounter').textContent = cur + ' / ' + TOTAL;
+    document.getElementById('progressFill').style.width = (cur / TOTAL * 100) + '%';
+    document.getElementById('prevBtn').disabled = cur === 1;
+    document.getElementById('nextBtn').disabled = cur === TOTAL;
+    document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i + 1 === cur));
+}
+
+function goTo(n) {
+    if (n === cur) return;
+    const prev = document.getElementById('slide-' + cur);
+    prev.classList.remove('active');
+    prev.classList.add('exit');
+    setTimeout(() => prev.classList.remove('exit'), 400);
+    cur = n;
+    const next = document.getElementById('slide-' + cur);
+    next.classList.add('active');
+    updateUI();
+}
+
+function go(dir) {
+    const n = cur + dir;
+    if (n >= 1 && n <= TOTAL) goTo(n);
+}
+
+document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') go(1);
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') go(-1);
+});
+
+// ── Quiz ──
+const questions = [
+    { q: 'What does 再见 mean?', hint: 'zàijiàn', opts: ['Hello','Goodbye','Thank you','Teacher'], ans: 1 },
+    { q: 'Which is the formal "you"?', hint: 'Honorific pronoun', opts: ['你','您','他','她'], ans: 1 },
+    { q: 'How do you say "Thank you"?', hint: '', opts: ['不客气','再见','谢谢','你好'], ans: 2 },
+    { q: 'What does 们 do to a word?', hint: 'e.g. 你 → 你们', opts: ['Makes it formal','Makes it plural','Makes it negative','Makes it past'], ans: 1 },
+    { q: 'How do you say "Hello everyone"?', hint: '', opts: ['你们好','大家好','您好','你好'], ans: 1 },
+];
+let qi = 0, done = false;
+
+function renderQ() {
+    const q = questions[qi];
+    document.getElementById('qProg').textContent = 'Question ' + (qi + 1) + ' of ' + questions.length;
+    document.getElementById('qText').textContent = q.q;
+    document.getElementById('qHint').textContent = q.hint;
+    document.getElementById('qFb').textContent = '';
+    document.getElementById('qNext').style.display = 'none';
+    const optsEl = document.getElementById('qOpts');
+    optsEl.innerHTML = '';
+    q.opts.forEach((o, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'qbtn';
+        btn.textContent = o;
+        btn.onclick = () => pick(btn, i);
+        optsEl.appendChild(btn);
+    });
+    done = false;
+}
+
+function pick(btn, i) {
+    if (done) return;
+    done = true;
+    const ans = questions[qi].ans;
+    document.querySelectorAll('.qbtn').forEach((b, j) => {
+        b.disabled = true;
+        if (j === ans) b.classList.add('correct');
+    });
+    const fb = document.getElementById('qFb');
+    if (i === ans) {
+        fb.textContent = '✅ Correct! Well done!';
+        fb.style.color = '#27AE60';
+    } else {
+        btn.classList.add('wrong');
+        fb.textContent = '❌ Not quite — the correct answer is highlighted.';
+        fb.style.color = '#E74C3C';
+    }
+    const nxt = document.getElementById('qNext');
+    nxt.style.display = 'inline-block';
+    if (qi >= questions.length - 1) {
+        nxt.textContent = '查看总结 →';
+        nxt.onclick = () => goTo(15);
+    } else {
+        nxt.textContent = 'Next →';
+    }
+}
+
+function nextQ() {
+    if (qi < questions.length - 1) { qi++; renderQ(); }
+}
+
+renderQ();
+updateUI();
+</script>
+</body>
+</html>
