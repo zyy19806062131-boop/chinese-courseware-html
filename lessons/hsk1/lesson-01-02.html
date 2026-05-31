@@ -55,32 +55,26 @@ body{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif;backg
 .obj-icon{font-size:22px;flex-shrink:0}
 .obj-zh{font-size:15px;font-weight:600;margin-bottom:4px;line-height:1.5}
 .obj-en{font-size:12px;color:var(--muted);line-height:1.5}
-/* DIALOGUE STAGE */
+/* DIALOGUE SLIDE */
 .dl-slide{padding:0;overflow:hidden;cursor:pointer}
 .scene-bg{position:absolute;inset:0;width:100%;height:100%}
-.dl-stage{position:absolute;inset:0;z-index:2;display:flex;align-items:flex-end;padding:0 16px 18px}
 .slide-tag-top{position:absolute;top:12px;left:50%;transform:translateX(-50%);z-index:10;white-space:nowrap}
-.char-wrap{width:120px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;position:relative;transition:filter .4s,opacity .4s}
-.char-wrap.speaking{filter:none;opacity:1}
-.char-wrap.dimmed{filter:brightness(.45) saturate(.2);opacity:.7}
-.char-svg{width:104px;height:166px;filter:drop-shadow(0 4px 8px rgba(0,0,0,.25))}
-.char-label{font-size:11px;color:white;background:rgba(0,0,0,.5);padding:2px 8px;border-radius:8px;margin-top:4px;white-space:nowrap}
-.char-ring{position:absolute;top:-4px;left:50%;transform:translateX(-50%);width:112px;height:112px;border-radius:50%;border:3px solid rgba(255,230,50,.7);animation:speakPulse 1.2s infinite;opacity:0;pointer-events:none}
-.char-wrap.speaking .char-ring{opacity:1}
-.dl-center{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 12px;align-self:center}
-.dl-bubble{background:rgba(255,255,255,.97);border-radius:16px;padding:16px 22px;max-width:360px;width:100%;box-shadow:0 8px 32px rgba(0,0,0,.2);animation:bubbleIn .3s ease}
-.dl-bubble .spk{font-size:11px;color:var(--muted);margin-bottom:3px;font-weight:600}
-.dl-bubble .bpy{font-size:13px;color:var(--pinyin);letter-spacing:1px;margin-bottom:3px}
-.dl-bubble .bzh{font-size:26px;font-weight:700;margin-bottom:3px;line-height:1.25}
-.dl-bubble .ben{font-size:12px;color:var(--muted);font-style:italic}
-.dl-progress{display:flex;gap:5px;margin-top:8px}
-.dl-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.4);transition:background .3s}
-.dl-dot.done{background:white}
-.dl-hint{margin-top:8px;font-size:12px;color:rgba(255,255,255,.9);background:rgba(0,0,0,.38);padding:4px 12px;border-radius:10px;letter-spacing:.3px}
+.dl-bar{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(8,12,24,.92) 28%);padding:14px 22px 18px;z-index:5;display:flex;align-items:center;gap:16px;min-height:94px}
+.dl-portrait-ring{width:64px;height:64px;border-radius:50%;overflow:hidden;border:2.5px solid rgba(255,255,255,.8);flex-shrink:0;background:rgba(30,40,60,.5);box-shadow:0 2px 12px rgba(0,0,0,.45)}
+.dl-portrait-svg{width:100%;height:100%;display:block}
+.dl-text-col{flex:1;min-width:0}
+.dl-name{font-size:13px;font-weight:700;color:rgba(255,220,120,.95);margin-bottom:4px;letter-spacing:.5px}
+.dl-py{font-size:12px;color:rgba(255,180,100,.9);letter-spacing:1px;min-height:16px;margin-bottom:2px}
+.dl-zh{font-size:23px;font-weight:700;color:white;line-height:1.3;text-shadow:0 1px 6px rgba(0,0,0,.6)}
+.dl-en{font-size:12px;color:rgba(190,215,255,.8);font-style:italic;margin-top:2px}
+.dl-status-col{display:flex;flex-direction:column;align-items:flex-end;gap:7px;flex-shrink:0}
+.dl-progress{display:flex;gap:5px}
+.dl-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.28);transition:background .3s}
+.dl-dot.done{background:rgba(255,215,80,.9)}
+.dl-hint{font-size:11px;color:rgba(255,255,255,.7);background:rgba(255,255,255,.14);padding:3px 10px;border-radius:10px;letter-spacing:.3px;white-space:nowrap}
 .hl-red{color:var(--red)}
 /* animations */
-@keyframes bubbleIn{from{opacity:0;transform:scale(.85) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}
-@keyframes speakPulse{0%,100%{transform:translateX(-50%) scale(1);opacity:.65}50%{transform:translateX(-50%) scale(1.14);opacity:.2}}
+@keyframes bubbleIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 @keyframes popIn{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
 @keyframes confettiFall{from{transform:translateY(-10px) rotate(0deg);opacity:1}to{transform:translateY(130px) rotate(380deg);opacity:0}}
 @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
@@ -202,7 +196,129 @@ body{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif;backg
 
 <svg style="display:none" xmlns="http://www.w3.org/2000/svg">
 <defs>
-<!-- 王一飞: navy blazer, bun hair -->
+<!-- 王一飞: teacher, warm tan, bun, navy blazer, glasses -->
+<symbol id="p-yifei" viewBox="0 0 80 80">
+  <path d="M0,80 L14,57 L30,64 L40,60 L50,64 L66,57 L80,80 Z" fill="#1B4F72"/>
+  <path d="M30,64 L36,71 L40,60 L44,71 L50,64" fill="none" stroke="white" stroke-width="2"/>
+  <rect x="34" y="54" width="12" height="12" rx="4" fill="#F0A070"/>
+  <ellipse cx="40" cy="34" rx="22" ry="25" fill="#F0A070"/>
+  <ellipse cx="40" cy="42" rx="20" ry="14" fill="#D88050" opacity=".16"/>
+  <path d="M18,28 Q20,5 40,3 Q60,5 62,28 Q57,12 40,10 Q23,12 18,28 Z" fill="#2C1808"/>
+  <ellipse cx="40" cy="7" rx="12" ry="9" fill="#2C1808"/>
+  <path d="M18,28 Q16,42 18,52" stroke="#2C1808" stroke-width="7" fill="none" stroke-linecap="round"/>
+  <path d="M62,28 Q64,42 62,52" stroke="#2C1808" stroke-width="7" fill="none" stroke-linecap="round"/>
+  <rect x="21" y="31" width="14" height="9" rx="3" fill="none" stroke="#3A2010" stroke-width="1.5"/>
+  <rect x="44" y="31" width="14" height="9" rx="3" fill="none" stroke="#3A2010" stroke-width="1.5"/>
+  <line x1="35" y1="36" x2="44" y2="36" stroke="#3A2010" stroke-width="1.2"/>
+  <line x1="21" y1="36" x2="17" y2="35" stroke="#3A2010" stroke-width="1.2"/>
+  <line x1="58" y1="36" x2="62" y2="35" stroke="#3A2010" stroke-width="1.2"/>
+  <ellipse cx="28" cy="36" rx="4" ry="3" fill="#1E0E06"/>
+  <ellipse cx="51" cy="36" rx="4" ry="3" fill="#1E0E06"/>
+  <circle cx="29" cy="35" r="1" fill="white" opacity=".75"/>
+  <circle cx="52" cy="35" r="1" fill="white" opacity=".75"/>
+  <path d="M22,28 Q28,26 34,28" stroke="#2C1808" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  <path d="M46,28 Q52,26 58,28" stroke="#2C1808" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  <path d="M37,44 Q40,48 43,44" stroke="#C07848" stroke-width="1.2" fill="none"/>
+  <path d="M30,51 Q40,57 50,51" stroke="#C05030" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+  <ellipse cx="20" cy="43" rx="5" ry="3" fill="#D06040" opacity=".2"/>
+  <ellipse cx="60" cy="43" rx="5" ry="3" fill="#D06040" opacity=".2"/>
+</symbol>
+<!-- 小语: AI, blue-tinted skin, cyan hair, teal outfit -->
+<symbol id="p-xiaoyu" viewBox="0 0 80 80">
+  <path d="M0,80 L14,58 L30,65 L40,61 L50,65 L66,58 L80,80 Z" fill="#0E9F8E"/>
+  <rect x="34" y="55" width="12" height="12" rx="4" fill="#C8E0F0"/>
+  <ellipse cx="40" cy="35" rx="22" ry="25" fill="#C8E0F0"/>
+  <ellipse cx="40" cy="43" rx="20" ry="14" fill="#A0C4E0" opacity=".2"/>
+  <path d="M18,28 Q20,5 40,3 Q60,5 62,28 Q57,10 40,8 Q23,10 18,28 Z" fill="#00ACC1"/>
+  <ellipse cx="26" cy="22" rx="12" ry="14" fill="#00BCD4"/>
+  <ellipse cx="54" cy="22" rx="12" ry="14" fill="#00BCD4"/>
+  <ellipse cx="40" cy="7" rx="10" ry="8" fill="#0097A7"/>
+  <circle cx="40" cy="35" r="27" fill="none" stroke="#00E5FF" stroke-width="1.5" opacity=".4"/>
+  <ellipse cx="29" cy="35" rx="5" ry="4" fill="#004D6A"/>
+  <ellipse cx="51" cy="35" rx="5" ry="4" fill="#004D6A"/>
+  <circle cx="30" cy="34" r="1.5" fill="white" opacity=".85"/>
+  <circle cx="52" cy="34" r="1.5" fill="white" opacity=".85"/>
+  <path d="M23,28 Q29,26 35,28" stroke="#00838F" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  <path d="M45,28 Q51,26 57,28" stroke="#00838F" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  <path d="M38,44 Q40,48 42,44" stroke="#88C8E0" stroke-width="1" fill="none"/>
+  <path d="M31,52 Q40,57 49,52" stroke="#0E9F8E" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+</symbol>
+<!-- 陈天中: male student, medium tan, short dark hair, gray hoodie -->
+<symbol id="p-chen" viewBox="0 0 80 80">
+  <path d="M0,80 L14,58 L30,65 L40,61 L50,65 L66,58 L80,80 Z" fill="#5D6D7E"/>
+  <path d="M28,67 Q40,63 52,67 L52,72 Q40,68 28,72 Z" fill="#4A5568"/>
+  <rect x="34" y="55" width="12" height="12" rx="4" fill="#D09060"/>
+  <ellipse cx="40" cy="35" rx="22" ry="25" fill="#D09060"/>
+  <ellipse cx="40" cy="43" rx="20" ry="14" fill="#A87040" opacity=".18"/>
+  <path d="M18,28 Q20,5 40,3 Q60,5 62,28 Q57,12 40,10 Q23,12 18,28 Z" fill="#1C1808"/>
+  <path d="M18,28 Q16,38 18,46" stroke="#1C1808" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <path d="M62,28 Q64,38 62,46" stroke="#1C1808" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <ellipse cx="29" cy="36" rx="4.5" ry="3.5" fill="#1A1008"/>
+  <ellipse cx="51" cy="36" rx="4.5" ry="3.5" fill="#1A1008"/>
+  <circle cx="30" cy="35" r="1.2" fill="white" opacity=".75"/>
+  <circle cx="52" cy="35" r="1.2" fill="white" opacity=".75"/>
+  <path d="M23,27 Q29,25 35,27" stroke="#1C1808" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  <path d="M45,27 Q51,25 57,27" stroke="#1C1808" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  <path d="M37,44 Q40,48 43,44" stroke="#A07040" stroke-width="1.2" fill="none"/>
+  <path d="M33,52 Q40,56 47,52" stroke="#A06040" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+</symbol>
+<!-- 白家月: female student, light skin, brown hair, coral top, bright smile -->
+<symbol id="p-bai" viewBox="0 0 80 80">
+  <path d="M0,80 L14,58 L30,65 L40,61 L50,65 L66,58 L80,80 Z" fill="#E74C3C"/>
+  <path d="M30,65 L36,72 L40,61 L44,72 L50,65" fill="none" stroke="white" stroke-width="2"/>
+  <rect x="34" y="55" width="12" height="12" rx="4" fill="#FFE0B8"/>
+  <ellipse cx="40" cy="34" rx="22" ry="25" fill="#FFE0B8"/>
+  <ellipse cx="40" cy="42" rx="20" ry="14" fill="#F0C090" opacity=".2"/>
+  <path d="M18,29 Q18,5 40,3 Q62,5 62,29 Q62,52 60,55" fill="#8B6030"/>
+  <path d="M18,29 Q16,52 18,54" fill="#8B6030"/>
+  <path d="M19,18 Q28,13 40,13 Q52,13 61,18 Q58,10 40,9 Q22,10 19,18 Z" fill="#A07840"/>
+  <path d="M24,34 Q30,31 36,34 Q30,38 24,34 Z" fill="#2C1808"/>
+  <path d="M44,34 Q50,31 56,34 Q50,38 44,34 Z" fill="#2C1808"/>
+  <circle cx="31" cy="33" r="1.2" fill="white" opacity=".8"/>
+  <circle cx="51" cy="33" r="1.2" fill="white" opacity=".8"/>
+  <path d="M22,28 Q29,26 36,28" stroke="#6B4820" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  <path d="M44,28 Q51,26 58,28" stroke="#6B4820" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  <path d="M37,43 Q40,47 43,43" stroke="#C08858" stroke-width="1" fill="none"/>
+  <path d="M29,50 Q40,58 51,50" stroke="#D06050" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <ellipse cx="40" cy="52" rx="7.5" ry="3.5" fill="white" opacity=".65"/>
+  <ellipse cx="20" cy="42" rx="5.5" ry="3.5" fill="#F08070" opacity=".28"/>
+  <ellipse cx="60" cy="42" rx="5.5" ry="3.5" fill="#F08070" opacity=".28"/>
+</symbol>
+<!-- 李文: male student, tan, dark hair, blue jacket -->
+<symbol id="p-liwen" viewBox="0 0 80 80">
+  <path d="M0,80 L14,57 L30,64 L40,60 L50,64 L66,57 L80,80 Z" fill="#2E86C1"/>
+  <path d="M30,64 L36,70 L40,60 L44,70 L50,64" fill="none" stroke="white" stroke-width="2"/>
+  <rect x="34" y="54" width="12" height="12" rx="4" fill="#D8956A"/>
+  <ellipse cx="40" cy="34" rx="22" ry="25" fill="#D8956A"/>
+  <ellipse cx="40" cy="42" rx="20" ry="14" fill="#B87050" opacity=".18"/>
+  <path d="M18,27 Q20,4 40,2 Q60,4 62,27 Q57,11 40,9 Q23,11 18,27 Z" fill="#1A1408"/>
+  <path d="M18,27 Q16,37 18,47" stroke="#1A1408" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <path d="M62,27 Q64,37 62,47" stroke="#1A1408" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <ellipse cx="29" cy="34" rx="4" ry="3.5" fill="#1A1008"/>
+  <ellipse cx="51" cy="34" rx="4" ry="3.5" fill="#1A1008"/>
+  <circle cx="30" cy="33" r="1" fill="white" opacity=".75"/>
+  <circle cx="52" cy="33" r="1" fill="white" opacity=".75"/>
+  <path d="M22,26 Q28,24 34,26" stroke="#1A1408" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  <path d="M46,26 Q52,24 58,26" stroke="#1A1408" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  <path d="M37,43 Q40,47 43,43" stroke="#B07848" stroke-width="1.2" fill="none"/>
+  <path d="M31,51 Q40,57 49,51" stroke="#B06040" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+</symbol>
+<!-- 学生们: group silhouette icon -->
+<symbol id="p-students" viewBox="0 0 80 80">
+  <ellipse cx="21" cy="30" rx="13" ry="15" fill="#2E7D32" opacity=".75"/>
+  <path d="M6,80 L8,50 L34,50 L36,80 Z" fill="#388E3C" opacity=".75"/>
+  <ellipse cx="59" cy="30" rx="13" ry="15" fill="#1565C0" opacity=".75"/>
+  <path d="M44,80 L46,50 L72,50 L74,80 Z" fill="#1976D2" opacity=".75"/>
+  <ellipse cx="40" cy="26" rx="16" ry="18" fill="#B71C1C"/>
+  <path d="M20,80 L23,48 L57,48 L60,80 Z" fill="#C62828"/>
+  <ellipse cx="21" cy="26" rx="8" ry="9" fill="#FFCC80" opacity=".45"/>
+  <ellipse cx="59" cy="26" rx="8" ry="9" fill="#FFCC80" opacity=".45"/>
+  <ellipse cx="40" cy="22" rx="10" ry="11" fill="#FFCC80" opacity=".7"/>
+  <ellipse cx="35" cy="20" rx="2" ry="1.8" fill="#3E2010" opacity=".85"/>
+  <ellipse cx="45" cy="20" rx="2" ry="1.8" fill="#3E2010" opacity=".85"/>
+  <path d="M34,27 Q40,31 46,27" stroke="#8B4513" stroke-width="1.5" fill="none" stroke-linecap="round" opacity=".8"/>
+</symbol>
+<!-- LEGACY (hidden, not used) -->
 <symbol id="c-yifei" viewBox="0 0 100 165">
   <ellipse cx="50" cy="161" rx="20" ry="5" fill="rgba(0,0,0,.12)"/>
   <rect x="33" y="118" width="13" height="38" rx="5" fill="#C08060"/>
@@ -356,130 +472,265 @@ body{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif;backg
 <!-- 4. TEXT 1-1: OFFICE -->
 <div class="slide dl-slide" id="slide-4" onclick="advanceDl(4)">
   <svg class="scene-bg" viewBox="0 0 800 420" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-    <rect width="800" height="420" fill="#F5EDD8"/>
-    <rect y="300" width="800" height="120" fill="#C8954A"/>
-    <line x1="0" y1="330" x2="800" y2="330" stroke="#B07830" stroke-width="2" opacity=".4"/>
-    <rect x="560" y="20" width="200" height="240" rx="6" fill="#87CEEB"/>
-    <rect x="560" y="20" width="200" height="240" rx="6" fill="none" stroke="#8B7050" stroke-width="8"/>
-    <line x1="660" y1="20" x2="660" y2="260" stroke="#8B7050" stroke-width="5"/>
-    <line x1="560" y1="140" x2="760" y2="140" stroke="#8B7050" stroke-width="5"/>
-    <ellipse cx="608" cy="78" rx="30" ry="18" fill="white" opacity=".75"/>
-    <ellipse cx="636" cy="65" rx="24" ry="16" fill="white" opacity=".75"/>
-    <ellipse cx="700" cy="88" rx="28" ry="15" fill="white" opacity=".7"/>
-    <rect x="15" y="40" width="100" height="258" rx="5" fill="#7D5C14"/>
-    <rect x="24" y="52" width="82" height="24" rx="3" fill="#C0392B"/>
-    <rect x="24" y="80" width="82" height="24" rx="3" fill="#2980B9"/>
-    <rect x="24" y="108" width="82" height="24" rx="3" fill="#27AE60"/>
-    <rect x="24" y="136" width="82" height="24" rx="3" fill="#E67E22"/>
-    <rect x="24" y="164" width="82" height="24" rx="3" fill="#8E44AD"/>
-    <rect x="24" y="192" width="82" height="24" rx="3" fill="#C0392B" opacity=".6"/>
-    <rect x="200" y="268" width="420" height="34" rx="8" fill="#8B6914"/>
-    <rect x="220" y="302" width="22" height="70" rx="4" fill="#7A5C10"/>
-    <rect x="565" y="302" width="22" height="70" rx="4" fill="#7A5C10"/>
-    <rect x="318" y="240" width="120" height="30" rx="4" fill="#2C3E50"/>
-    <rect x="306" y="268" width="144" height="10" rx="3" fill="#34495E"/>
-    <rect x="228" y="246" width="60" height="50" rx="3" fill="#ECF0F1" opacity=".8"/>
-    <line x1="244" y1="257" x2="278" y2="257" stroke="#BDC3C7" stroke-width="2"/>
-    <line x1="244" y1="265" x2="278" y2="265" stroke="#BDC3C7" stroke-width="2"/>
-    <line x1="244" y1="273" x2="278" y2="273" stroke="#BDC3C7" stroke-width="2"/>
+    <defs>
+      <linearGradient id="g4w" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#F5ECD5"/><stop offset="100%" stop-color="#E4D3B2"/></linearGradient>
+      <linearGradient id="g4f" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#C4965A"/><stop offset="100%" stop-color="#9C7038"/></linearGradient>
+      <linearGradient id="g4sk" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#6AB4E8"/><stop offset="100%" stop-color="#A8D8F0"/></linearGradient>
+    </defs>
+    <rect width="800" height="420" fill="url(#g4w)"/>
+    <polygon points="0,308 800,308 800,420 0,420" fill="url(#g4f)"/>
+    <line x1="0" y1="332" x2="800" y2="323" stroke="#9A7040" stroke-width="1.5" opacity=".4"/>
+    <line x1="0" y1="355" x2="800" y2="343" stroke="#9A7040" stroke-width="1.5" opacity=".4"/>
+    <line x1="0" y1="380" x2="800" y2="364" stroke="#9A7040" stroke-width="1.5" opacity=".4"/>
+    <line x1="200" y1="308" x2="150" y2="420" stroke="#9A7040" stroke-width="1" opacity=".3"/>
+    <line x1="400" y1="308" x2="365" y2="420" stroke="#9A7040" stroke-width="1" opacity=".3"/>
+    <line x1="600" y1="308" x2="582" y2="420" stroke="#9A7040" stroke-width="1" opacity=".3"/>
+    <rect x="0" y="0" width="18" height="420" fill="rgba(0,0,0,.07)"/>
+    <!-- Bookshelf -->
+    <rect x="18" y="26" width="130" height="288" rx="3" fill="#6B421E"/>
+    <rect x="18" y="26" width="130" height="7" fill="#8B5A2A"/>
+    <rect x="18" y="108" width="130" height="7" fill="#8B5A2A"/>
+    <rect x="18" y="188" width="130" height="7" fill="#8B5A2A"/>
+    <rect x="18" y="266" width="130" height="7" fill="#8B5A2A"/>
+    <rect x="24" y="34" width="12" height="68" rx="1" fill="#C0392B"/>
+    <rect x="38" y="40" width="10" height="62" rx="1" fill="#2980B9"/>
+    <rect x="50" y="34" width="14" height="68" rx="1" fill="#27AE60"/>
+    <rect x="66" y="42" width="11" height="60" rx="1" fill="#E67E22"/>
+    <rect x="79" y="34" width="13" height="68" rx="1" fill="#8E44AD"/>
+    <rect x="94" y="42" width="10" height="60" rx="1" fill="#F39C12"/>
+    <rect x="106" y="36" width="12" height="66" rx="1" fill="#1ABC9C"/>
+    <rect x="120" y="42" width="10" height="60" rx="1" fill="#E74C3C"/>
+    <rect x="24" y="116" width="14" height="66" rx="1" fill="#3498DB"/>
+    <rect x="40" y="122" width="11" height="60" rx="1" fill="#C0392B"/>
+    <rect x="53" y="116" width="13" height="66" rx="1" fill="#2C3E50"/>
+    <rect x="68" y="124" width="10" height="58" rx="1" fill="#16A085"/>
+    <rect x="80" y="116" width="15" height="66" rx="1" fill="#8E44AD"/>
+    <rect x="97" y="122" width="11" height="60" rx="1" fill="#7F8C8D"/>
+    <rect x="110" y="116" width="12" height="66" rx="1" fill="#F1C40F"/>
+    <rect x="24" y="196" width="12" height="64" rx="1" fill="#8B4513"/>
+    <rect x="38" y="202" width="14" height="58" rx="1" fill="#4682B4"/>
+    <rect x="54" y="196" width="11" height="64" rx="1" fill="#556B2F"/>
+    <rect x="67" y="204" width="13" height="56" rx="1" fill="#B8860B"/>
+    <rect x="82" y="198" width="10" height="62" rx="1" fill="#C0392B" opacity=".7"/>
+    <rect x="108" y="236" width="18" height="26" rx="3" fill="#7B3F00"/>
+    <ellipse cx="117" cy="230" rx="11" ry="13" fill="#2E7D32"/>
+    <ellipse cx="109" cy="236" rx="7" ry="9" fill="#388E3C"/>
+    <!-- Window -->
+    <rect x="498" y="18" width="232" height="264" rx="5" fill="url(#g4sk)"/>
+    <rect x="498" y="18" width="232" height="264" rx="5" fill="none" stroke="#7B5020" stroke-width="9"/>
+    <line x1="614" y1="18" x2="614" y2="282" stroke="#7B5020" stroke-width="6"/>
+    <line x1="498" y1="148" x2="730" y2="148" stroke="#7B5020" stroke-width="6"/>
+    <ellipse cx="543" cy="62" rx="30" ry="17" fill="white" opacity=".88"/>
+    <ellipse cx="566" cy="51" rx="22" ry="15" fill="white" opacity=".85"/>
+    <ellipse cx="654" cy="74" rx="28" ry="16" fill="white" opacity=".82"/>
+    <ellipse cx="677" cy="62" rx="18" ry="13" fill="white" opacity=".78"/>
+    <ellipse cx="530" cy="180" rx="20" ry="11" fill="white" opacity=".6"/>
+    <ellipse cx="676" cy="192" rx="22" ry="12" fill="white" opacity=".55"/>
+    <rect x="493" y="278" width="242" height="12" rx="3" fill="#9B7A3C"/>
+    <polygon points="730,18 730,282 600,420 400,420" fill="rgba(180,220,255,.06)"/>
+    <!-- Diploma -->
+    <rect x="214" y="48" width="126" height="96" rx="3" fill="#8B6914"/>
+    <rect x="221" y="55" width="112" height="82" rx="2" fill="#FFF8E7"/>
+    <rect x="225" y="59" width="104" height="74" rx="1" fill="none" stroke="#C8A832" stroke-width="1.5"/>
+    <text x="277" y="84" font-family="serif" font-size="10" fill="#5C4008" text-anchor="middle">教师资格证书</text>
+    <text x="277" y="99" font-family="serif" font-size="7.5" fill="#8B6914" text-anchor="middle">Teaching Certificate</text>
+    <line x1="232" y1="110" x2="320" y2="110" stroke="#C8A832" stroke-width="1" opacity=".5"/>
+    <text x="277" y="122" font-family="serif" font-size="8" fill="#8B6914" text-anchor="middle">王一飞</text>
+    <!-- Clock -->
+    <circle cx="408" cy="95" r="38" fill="white" stroke="#5C3A1E" stroke-width="4"/>
+    <circle cx="408" cy="95" r="3" fill="#5C3A1E"/>
+    <line x1="408" y1="61" x2="408" y2="69" stroke="#5C3A1E" stroke-width="2.5"/>
+    <line x1="408" y1="121" x2="408" y2="129" stroke="#5C3A1E" stroke-width="2.5"/>
+    <line x1="374" y1="95" x2="382" y2="95" stroke="#5C3A1E" stroke-width="2.5"/>
+    <line x1="434" y1="95" x2="442" y2="95" stroke="#5C3A1E" stroke-width="2.5"/>
+    <line x1="408" y1="95" x2="408" y2="69" stroke="#2C3E50" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="408" y1="95" x2="428" y2="95" stroke="#C0392B" stroke-width="2" stroke-linecap="round"/>
+    <!-- Desk -->
+    <polygon points="214,280 582,280 620,300 176,300" fill="#8B5E2A"/>
+    <polygon points="176,300 620,300 620,358 176,358" fill="#7A5020"/>
+    <rect x="176" y="295" width="444" height="7" rx="1" fill="#A07838"/>
+    <rect x="186" y="356" width="16" height="44" rx="3" fill="#6B4218"/>
+    <rect x="590" y="356" width="16" height="44" rx="3" fill="#6B4218"/>
+    <!-- Laptop -->
+    <polygon points="288,258 490,258 500,276 278,276" fill="#2C3E50"/>
+    <rect x="295" y="260" width="188" height="14" rx="1" fill="#3498DB" opacity=".75"/>
+    <line x1="308" y1="264" x2="470" y2="264" stroke="white" stroke-width="1" opacity=".35"/>
+    <line x1="308" y1="268" x2="452" y2="268" stroke="white" stroke-width="1" opacity=".35"/>
+    <polygon points="275,277 502,277 510,283 268,283" fill="#34495E"/>
+    <ellipse cx="389" cy="284" rx="12" ry="2" fill="#2C3E50"/>
+    <!-- Papers -->
+    <polygon points="220,276 312,276 316,282 224,282" fill="white" opacity=".9"/>
+    <polygon points="224,282 318,282 322,288" fill="#ECF0F1" opacity=".8"/>
+    <line x1="230" y1="278" x2="306" y2="278" stroke="#BDC3C7" stroke-width="1"/>
+    <!-- Coffee mug -->
+    <rect x="512" y="265" width="28" height="30" rx="5" fill="#B03A2E"/>
+    <rect x="515" y="268" width="22" height="8" rx="2" fill="rgba(255,200,190,.5)"/>
+    <path d="M540,277 Q550,277 550,284 Q550,291 540,291" stroke="#B03A2E" stroke-width="3" fill="none"/>
+    <path d="M522,262 Q526,254 522,248" stroke="rgba(200,200,200,.45)" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <path d="M529,261 Q533,253 529,247" stroke="rgba(200,200,200,.35)" stroke-width="2" fill="none" stroke-linecap="round"/>
   </svg>
   <div class="slide-tag-top"><div class="tag">📖 课文1 <span class="tag-en">Text 1 · In the office</span></div></div>
-  <div class="dl-stage">
-    <div class="char-wrap" id="s4-L"><div class="char-ring"></div>
-      <svg viewBox="0 0 100 165" class="char-svg"><use href="#c-yifei"/></svg>
-      <div class="char-label">王一飞</div></div>
-    <div class="dl-center">
-      <div class="dl-bubble" id="s4-bubble">
-        <div class="spk" id="s4-spk"></div><div class="bpy" id="s4-py"></div>
-        <div class="bzh" id="s4-zh">点击开始对话</div>
-        <div class="ben" id="s4-en">Click anywhere to start</div>
-      </div>
+  <div class="dl-bar" id="s4-bar">
+    <div class="dl-portrait-ring"><svg viewBox="0 0 80 80" class="dl-portrait-svg" xmlns="http://www.w3.org/2000/svg"><use id="s4-portrait-use" href="#p-yifei"/></svg></div>
+    <div class="dl-text-col">
+      <div class="dl-name" id="s4-name">点击开始对话</div>
+      <div class="dl-py" id="s4-py"></div>
+      <div class="dl-zh" id="s4-zh">Click anywhere to start</div>
+      <div class="dl-en" id="s4-en"></div>
+    </div>
+    <div class="dl-status-col">
       <div class="dl-progress" id="s4-prog"></div>
       <div class="dl-hint" id="s4-hint">👆 点击开始</div>
     </div>
-    <div class="char-wrap" id="s4-R"><div class="char-ring"></div>
-      <svg viewBox="0 0 100 165" class="char-svg"><use href="#c-xiaoyu"/></svg>
-      <div class="char-label">小语</div></div>
   </div>
 </div>
 
-<!-- 5. TEXT 1-2: CLASSROOM -->
+<!-- 5. TEXT 1-2: CLASSROOM (student POV, morning, looking at board) -->
 <div class="slide dl-slide" id="slide-5" onclick="advanceDl(5)">
   <svg class="scene-bg" viewBox="0 0 800 420" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-    <rect width="800" height="420" fill="#EAF0EA"/>
-    <rect y="300" width="800" height="120" fill="#C8B08A"/>
-    <rect x="60" y="28" width="600" height="215" rx="4" fill="#2E7D32"/>
-    <rect x="68" y="36" width="584" height="199" rx="2" fill="#388E3C"/>
-    <line x1="68" y1="90" x2="652" y2="90" stroke="rgba(255,255,255,.15)" stroke-width="1"/>
-    <line x1="68" y1="140" x2="652" y2="140" stroke="rgba(255,255,255,.15)" stroke-width="1"/>
-    <line x1="68" y1="190" x2="652" y2="190" stroke="rgba(255,255,255,.15)" stroke-width="1"/>
-    <text x="100" y="95" font-family="serif" font-size="38" fill="rgba(255,255,255,.7)">你好！大家好！</text>
-    <text x="150" y="140" font-family="serif" font-size="24" fill="rgba(255,255,255,.5)">Nǐ hǎo! Dàjiā hǎo!</text>
-    <rect x="290" y="250" width="6" height="58" fill="#5D4037"/>
-    <rect x="110" y="290" width="155" height="16" rx="4" fill="#8B6914" opacity=".8"/>
-    <rect x="322" y="280" width="155" height="16" rx="4" fill="#8B6914" opacity=".8"/>
-    <rect x="532" y="290" width="155" height="16" rx="4" fill="#8B6914" opacity=".8"/>
-    <rect x="110" y="306" width="155" height="28" rx="4" fill="#7A5C10" opacity=".45"/>
-    <rect x="322" y="296" width="155" height="28" rx="4" fill="#7A5C10" opacity=".45"/>
-    <rect x="532" y="306" width="155" height="28" rx="4" fill="#7A5C10" opacity=".45"/>
-    <rect x="730" y="48" width="50" height="240" rx="4" fill="#2196F3" opacity=".2"/>
-    <line x1="755" y1="48" x2="755" y2="288" stroke="white" stroke-width="2" opacity=".4"/>
-    <line x1="730" y1="168" x2="780" y2="168" stroke="white" stroke-width="2" opacity=".4"/>
+    <defs>
+      <linearGradient id="g5w" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#EEEDEA"/><stop offset="100%" stop-color="#E0DFD8"/></linearGradient>
+      <linearGradient id="g5f" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#C8B890"/><stop offset="100%" stop-color="#A89870"/></linearGradient>
+    </defs>
+    <rect width="800" height="420" fill="url(#g5w)"/>
+    <rect width="800" height="20" fill="#D8D8CC"/>
+    <polygon points="0,298 800,298 800,420 0,420" fill="url(#g5f)"/>
+    <line x1="400" y1="298" x2="0" y2="420" stroke="#A89060" stroke-width="1" opacity=".35"/>
+    <line x1="400" y1="298" x2="160" y2="420" stroke="#A89060" stroke-width="1" opacity=".3"/>
+    <line x1="400" y1="298" x2="320" y2="420" stroke="#A89060" stroke-width="1" opacity=".3"/>
+    <line x1="400" y1="298" x2="480" y2="420" stroke="#A89060" stroke-width="1" opacity=".3"/>
+    <line x1="400" y1="298" x2="640" y2="420" stroke="#A89060" stroke-width="1" opacity=".3"/>
+    <line x1="400" y1="298" x2="800" y2="420" stroke="#A89060" stroke-width="1" opacity=".35"/>
+    <line x1="80" y1="328" x2="720" y2="328" stroke="#A89060" stroke-width="1" opacity=".28"/>
+    <line x1="40" y1="360" x2="760" y2="360" stroke="#A89060" stroke-width="1" opacity=".28"/>
+    <line x1="8" y1="395" x2="792" y2="395" stroke="#A89060" stroke-width="1" opacity=".28"/>
+    <!-- Chalkboard -->
+    <rect x="68" y="18" width="646" height="230" rx="4" fill="#2D5F26"/>
+    <rect x="76" y="26" width="630" height="214" rx="2" fill="#336E2C"/>
+    <rect x="68" y="248" width="646" height="11" rx="2" fill="#5D4037"/>
+    <rect x="68" y="18" width="646" height="242" rx="4" fill="none" stroke="#3E2810" stroke-width="8"/>
+    <text x="391" y="100" font-family="'Noto Sans SC',serif" font-size="52" fill="rgba(255,255,255,.88)" text-anchor="middle" font-weight="bold">大家好！</text>
+    <text x="391" y="152" font-family="serif" font-size="30" fill="rgba(255,255,255,.65)" text-anchor="middle">Nǐ hǎo! Nǐmen hǎo!</text>
+    <line x1="84" y1="178" x2="708" y2="178" stroke="rgba(255,255,255,.12)" stroke-width="1"/>
+    <line x1="84" y1="208" x2="708" y2="208" stroke="rgba(255,255,255,.12)" stroke-width="1"/>
+    <rect x="120" y="252" width="22" height="6" rx="2" fill="white" opacity=".65"/>
+    <rect x="150" y="252" width="16" height="6" rx="2" fill="#F8C8C0" opacity=".65"/>
+    <!-- Podium -->
+    <polygon points="316,288 486,288 502,298 300,298" fill="#7A5020"/>
+    <rect x="300" y="294" width="202" height="8" rx="2" fill="#8B5A2A"/>
+    <!-- Student desks row 1 (closest) -->
+    <polygon points="98,338 352,338 372,360 78,360" fill="#9A7040"/>
+    <polygon points="78,360 372,360 384,390 66,390" fill="#7A5020"/>
+    <polygon points="418,338 662,338 682,360 398,360" fill="#9A7040"/>
+    <polygon points="398,360 682,360 694,390 384,390" fill="#7A5020"/>
+    <!-- Row 2 -->
+    <polygon points="166,306 342,306 356,316 152,316" fill="#9A7040" opacity=".85"/>
+    <polygon points="152,316 356,316 362,328 146,328" fill="#7A5020" opacity=".85"/>
+    <polygon points="456,306 630,306 642,316 442,316" fill="#9A7040" opacity=".85"/>
+    <polygon points="442,316 642,316 650,328 436,328" fill="#7A5020" opacity=".85"/>
+    <!-- Row 3 (far) -->
+    <polygon points="216,292 318,292 326,298 208,298" fill="#9A7040" opacity=".65"/>
+    <polygon points="480,292 580,292 588,298 472,298" fill="#9A7040" opacity=".65"/>
+    <!-- Right window (morning blue light) -->
+    <rect x="748" y="36" width="46" height="222" rx="3" fill="rgba(180,220,255,.58)"/>
+    <rect x="748" y="36" width="46" height="222" rx="3" fill="none" stroke="#8B6010" stroke-width="5"/>
+    <line x1="771" y1="36" x2="771" y2="258" stroke="#8B6010" stroke-width="3"/>
+    <line x1="748" y1="140" x2="794" y2="140" stroke="#8B6010" stroke-width="3"/>
+    <polygon points="794,36 794,258 680,298 640,258" fill="rgba(180,220,255,.07)"/>
+    <!-- Chinese flag (left wall) -->
+    <rect x="16" y="32" width="66" height="44" rx="1" fill="#DE2910"/>
+    <polygon points="37,38 39,46 46,46 40,50 42,57 37,53 32,57 34,50 28,46 35,46" fill="#FFDE00"/>
+    <circle cx="52" cy="38" r="2.5" fill="#FFDE00"/>
+    <circle cx="57" cy="44" r="2.5" fill="#FFDE00"/>
+    <circle cx="57" cy="52" r="2.5" fill="#FFDE00"/>
+    <circle cx="52" cy="58" r="2.5" fill="#FFDE00"/>
   </svg>
   <div class="slide-tag-top"><div class="tag">📖 课文2 <span class="tag-en">Text 2 · In the classroom</span></div></div>
-  <div class="dl-stage">
-    <div class="char-wrap" id="s5-L"><div class="char-ring"></div>
-      <svg viewBox="0 0 100 165" class="char-svg"><use href="#c-yifei"/></svg>
-      <div class="char-label">王一飞</div></div>
-    <div class="dl-center">
-      <div class="dl-bubble" id="s5-bubble">
-        <div class="spk" id="s5-spk"></div><div class="bpy" id="s5-py"></div>
-        <div class="bzh" id="s5-zh">点击开始对话</div>
-        <div class="ben" id="s5-en">Click anywhere to start</div>
-      </div>
+  <div class="dl-bar" id="s5-bar">
+    <div class="dl-portrait-ring"><svg viewBox="0 0 80 80" class="dl-portrait-svg" xmlns="http://www.w3.org/2000/svg"><use id="s5-portrait-use" href="#p-yifei"/></svg></div>
+    <div class="dl-text-col">
+      <div class="dl-name" id="s5-name">点击开始对话</div>
+      <div class="dl-py" id="s5-py"></div>
+      <div class="dl-zh" id="s5-zh">Click anywhere to start</div>
+      <div class="dl-en" id="s5-en"></div>
+    </div>
+    <div class="dl-status-col">
       <div class="dl-progress" id="s5-prog"></div>
       <div class="dl-hint" id="s5-hint">👆 点击开始</div>
     </div>
-    <div class="char-wrap" id="s5-R"><div class="char-ring"></div>
-      <svg viewBox="0 0 100 165" class="char-svg"><use href="#c-xiaoyu"/></svg>
-      <div class="char-label">小语</div></div>
   </div>
 </div>
 
-<!-- 6. TEXT 1-3: CLASSROOM FAREWELL -->
+<!-- 6. TEXT 1-3: CLASSROOM FAREWELL (teacher POV, afternoon, looking over desks) -->
 <div class="slide dl-slide" id="slide-6" onclick="advanceDl(6)">
   <svg class="scene-bg" viewBox="0 0 800 420" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-    <rect width="800" height="420" fill="#EAF0EA"/>
-    <rect y="300" width="800" height="120" fill="#C8B08A"/>
-    <rect x="60" y="28" width="600" height="215" rx="4" fill="#2E7D32"/>
-    <rect x="68" y="36" width="584" height="199" rx="2" fill="#388E3C"/>
-    <text x="90" y="100" font-family="serif" font-size="40" fill="rgba(255,255,255,.7)">谢谢！再见！</text>
-    <text x="110" y="148" font-family="serif" font-size="26" fill="rgba(255,255,255,.5)">Xièxie! Zàijiàn!</text>
-    <rect x="290" y="250" width="6" height="58" fill="#5D4037"/>
-    <rect x="110" y="290" width="155" height="16" rx="4" fill="#8B6914" opacity=".8"/>
-    <rect x="322" y="280" width="155" height="16" rx="4" fill="#8B6914" opacity=".8"/>
-    <rect x="532" y="290" width="155" height="16" rx="4" fill="#8B6914" opacity=".8"/>
-    <rect x="110" y="306" width="155" height="28" rx="4" fill="#7A5C10" opacity=".45"/>
-    <rect x="322" y="296" width="155" height="28" rx="4" fill="#7A5C10" opacity=".45"/>
-    <rect x="532" y="306" width="155" height="28" rx="4" fill="#7A5C10" opacity=".45"/>
+    <defs>
+      <linearGradient id="g6w" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FFF5E0"/><stop offset="100%" stop-color="#F0E2C0"/></linearGradient>
+      <linearGradient id="g6f" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#CAA870"/><stop offset="100%" stop-color="#AA8850"/></linearGradient>
+      <linearGradient id="g6bk" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#F5E8C0"/><stop offset="100%" stop-color="#E8D090"/></linearGradient>
+    </defs>
+    <rect width="800" height="420" fill="url(#g6w)"/>
+    <rect width="800" height="18" fill="#E8D8B0"/>
+    <!-- Back portion of room (wall, perspective) -->
+    <polygon points="160,178 640,178 800,420 0,420" fill="url(#g6bk)"/>
+    <!-- Floor perspective lines -->
+    <polygon points="0,308 800,308 800,420 0,420" fill="url(#g6f)"/>
+    <line x1="400" y1="308" x2="0" y2="420" stroke="#AA8050" stroke-width="1" opacity=".3"/>
+    <line x1="400" y1="308" x2="200" y2="420" stroke="#AA8050" stroke-width="1" opacity=".3"/>
+    <line x1="400" y1="308" x2="400" y2="420" stroke="#AA8050" stroke-width="1" opacity=".3"/>
+    <line x1="400" y1="308" x2="600" y2="420" stroke="#AA8050" stroke-width="1" opacity=".3"/>
+    <line x1="400" y1="308" x2="800" y2="420" stroke="#AA8050" stroke-width="1" opacity=".3"/>
+    <!-- Left wall windows (afternoon golden light) -->
+    <rect x="0" y="38" width="56" height="202" rx="4" fill="rgba(255,210,80,.38)"/>
+    <rect x="0" y="38" width="56" height="202" rx="4" fill="none" stroke="#7B5020" stroke-width="6"/>
+    <line x1="0" y1="136" x2="56" y2="136" stroke="#7B5020" stroke-width="4"/>
+    <polygon points="56,38 56,240 220,348 180,298" fill="rgba(255,200,80,.08)"/>
+    <polygon points="56,38 56,138 260,298 220,248" fill="rgba(255,200,80,.06)"/>
+    <!-- Student desks row 1 (closest, largest) -->
+    <polygon points="58,278 232,278 252,293 40,293" fill="#9A7040"/>
+    <polygon points="40,293 252,293 260,308 32,308" fill="#7A5020"/>
+    <polygon points="348,278 522,278 540,293 330,293" fill="#9A7040"/>
+    <polygon points="330,293 540,293 548,308 322,308" fill="#7A5020"/>
+    <polygon points="578,278 752,278 764,293 566,293" fill="#9A7040"/>
+    <polygon points="566,293 764,293 770,308 560,308" fill="#7A5020"/>
+    <!-- Row 2 -->
+    <polygon points="88,248 230,248 244,258 74,258" fill="#9A7040" opacity=".9"/>
+    <polygon points="74,258 244,258 250,270 68,270" fill="#7A5020" opacity=".9"/>
+    <polygon points="334,248 476,248 488,258 320,258" fill="#9A7040" opacity=".9"/>
+    <polygon points="320,258 488,258 496,270 314,270" fill="#7A5020" opacity=".9"/>
+    <polygon points="568,248 710,248 720,258 556,258" fill="#9A7040" opacity=".9"/>
+    <polygon points="556,258 720,258 728,270 550,270" fill="#7A5020" opacity=".9"/>
+    <!-- Row 3 -->
+    <polygon points="118,220 232,220 240,229 110,229" fill="#9A7040" opacity=".75"/>
+    <polygon points="318,220 432,220 440,229 310,229" fill="#9A7040" opacity=".75"/>
+    <polygon points="516,220 630,220 638,229 508,229" fill="#9A7040" opacity=".75"/>
+    <!-- Row 4 (far) -->
+    <polygon points="154,204 248,204 254,210 148,210" fill="#9A7040" opacity=".55"/>
+    <polygon points="314,204 408,204 414,210 308,210" fill="#9A7040" opacity=".55"/>
+    <polygon points="474,204 568,204 574,210 468,210" fill="#9A7040" opacity=".55"/>
+    <!-- Back wall windows (afternoon glow) -->
+    <rect x="218" y="186" width="92" height="82" rx="3" fill="rgba(255,176,50,.42)"/>
+    <rect x="218" y="186" width="92" height="82" rx="3" fill="none" stroke="#7B5020" stroke-width="5"/>
+    <line x1="264" y1="186" x2="264" y2="268" stroke="#7B5020" stroke-width="3"/>
+    <line x1="218" y1="226" x2="310" y2="226" stroke="#7B5020" stroke-width="3"/>
+    <rect x="478" y="186" width="92" height="82" rx="3" fill="rgba(255,176,50,.42)"/>
+    <rect x="478" y="186" width="92" height="82" rx="3" fill="none" stroke="#7B5020" stroke-width="5"/>
+    <line x1="524" y1="186" x2="524" y2="268" stroke="#7B5020" stroke-width="3"/>
+    <line x1="478" y1="226" x2="570" y2="226" stroke="#7B5020" stroke-width="3"/>
   </svg>
   <div class="slide-tag-top"><div class="tag">📖 课文3 <span class="tag-en">Text 3 · Gratitude &amp; Farewell</span></div></div>
-  <div class="dl-stage">
-    <div class="char-wrap" id="s6-L"><div class="char-ring"></div>
-      <svg viewBox="0 0 100 165" class="char-svg"><use href="#c-yifei"/></svg>
-      <div class="char-label">王一飞</div></div>
-    <div class="dl-center">
-      <div class="dl-bubble" id="s6-bubble">
-        <div class="spk" id="s6-spk"></div><div class="bpy" id="s6-py"></div>
-        <div class="bzh" id="s6-zh">点击开始对话</div>
-        <div class="ben" id="s6-en">Click anywhere to start</div>
-      </div>
+  <div class="dl-bar" id="s6-bar">
+    <div class="dl-portrait-ring"><svg viewBox="0 0 80 80" class="dl-portrait-svg" xmlns="http://www.w3.org/2000/svg"><use id="s6-portrait-use" href="#p-students"/></svg></div>
+    <div class="dl-text-col">
+      <div class="dl-name" id="s6-name">点击开始对话</div>
+      <div class="dl-py" id="s6-py"></div>
+      <div class="dl-zh" id="s6-zh">Click anywhere to start</div>
+      <div class="dl-en" id="s6-en"></div>
+    </div>
+    <div class="dl-status-col">
       <div class="dl-progress" id="s6-prog"></div>
       <div class="dl-hint" id="s6-hint">👆 点击开始</div>
     </div>
-    <div class="char-wrap" id="s6-R"><div class="char-ring"></div>
-      <svg viewBox="0 0 100 165" class="char-svg"><use href="#c-xiaoyu"/></svg>
-      <div class="char-label">小语</div></div>
   </div>
 </div>
 
@@ -552,125 +803,227 @@ body{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif;backg
   </div>
 </div>
 
-<!-- 12. TEXT 2-1: CLASSROOM, teacher + Chen -->
+<!-- 12. TEXT 2-1: CLASSROOM, side-angle view, name lesson -->
 <div class="slide dl-slide" id="slide-12" onclick="advanceDl(12)">
   <svg class="scene-bg" viewBox="0 0 800 420" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-    <rect width="800" height="420" fill="#EAF0EA"/>
-    <rect y="300" width="800" height="120" fill="#C8B08A"/>
-    <rect x="60" y="28" width="600" height="215" rx="4" fill="#2E7D32"/>
-    <rect x="68" y="36" width="584" height="199" rx="2" fill="#388E3C"/>
-    <text x="78" y="95" font-family="serif" font-size="32" fill="rgba(255,255,255,.7)">请问你叫什么名字？</text>
-    <text x="120" y="144" font-family="serif" font-size="22" fill="rgba(255,255,255,.5)">Qǐngwèn nǐ jiào shénme míngzi?</text>
-    <rect x="290" y="250" width="6" height="58" fill="#5D4037"/>
-    <rect x="110" y="290" width="155" height="16" rx="4" fill="#8B6914" opacity=".8"/>
-    <rect x="322" y="280" width="155" height="16" rx="4" fill="#8B6914" opacity=".8"/>
-    <rect x="532" y="290" width="155" height="16" rx="4" fill="#8B6914" opacity=".8"/>
-    <rect x="110" y="306" width="155" height="28" rx="4" fill="#7A5C10" opacity=".45"/>
-    <rect x="322" y="296" width="155" height="28" rx="4" fill="#7A5C10" opacity=".45"/>
-    <rect x="532" y="306" width="155" height="28" rx="4" fill="#7A5C10" opacity=".45"/>
+    <defs>
+      <linearGradient id="g12w" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#EEF2F5"/><stop offset="100%" stop-color="#DFE5EA"/></linearGradient>
+      <linearGradient id="g12f" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#BFBA9A"/><stop offset="100%" stop-color="#9C9870"/></linearGradient>
+    </defs>
+    <rect width="800" height="420" fill="url(#g12w)"/>
+    <!-- Board angled on left (side-perspective view) -->
+    <polygon points="38,18 264,18 244,282 28,282" fill="#2D5F26"/>
+    <polygon points="46,26 256,26 238,274 38,274" fill="#336E2C"/>
+    <polygon points="28,282 244,282 238,295 24,295" fill="#5D4037"/>
+    <polygon points="38,18 264,18 244,282 28,282" fill="none" stroke="#3E2810" stroke-width="7"/>
+    <text x="150" y="108" font-family="'Noto Sans SC',serif" font-size="22" fill="rgba(255,255,255,.86)" text-anchor="middle" font-weight="bold" transform="skewX(-5)">请问你叫</text>
+    <text x="150" y="146" font-family="'Noto Sans SC',serif" font-size="22" fill="rgba(255,255,255,.86)" text-anchor="middle" font-weight="bold" transform="skewX(-5)">什么名字？</text>
+    <text x="150" y="182" font-family="serif" font-size="13" fill="rgba(255,255,255,.62)" text-anchor="middle" transform="skewX(-5)">Qǐngwèn nǐ jiào</text>
+    <text x="150" y="200" font-family="serif" font-size="13" fill="rgba(255,255,255,.62)" text-anchor="middle" transform="skewX(-5)">shénme míngzi?</text>
+    <!-- Chalk ledge + eraser -->
+    <rect x="28" y="282" width="216" height="5" fill="#DDD" opacity=".4"/>
+    <!-- Floor -->
+    <polygon points="0,318 800,318 800,420 0,420" fill="url(#g12f)"/>
+    <line x1="400" y1="318" x2="0" y2="420" stroke="#9C9060" stroke-width="1" opacity=".35"/>
+    <line x1="400" y1="318" x2="200" y2="420" stroke="#9C9060" stroke-width="1" opacity=".3"/>
+    <line x1="400" y1="318" x2="600" y2="420" stroke="#9C9060" stroke-width="1" opacity=".3"/>
+    <line x1="400" y1="318" x2="800" y2="420" stroke="#9C9060" stroke-width="1" opacity=".35"/>
+    <!-- Prominent front student desk (right foreground) -->
+    <polygon points="440,288 754,288 772,308 422,308" fill="#9A7040"/>
+    <polygon points="422,308 772,308 782,358 412,358" fill="#7A5020"/>
+    <rect x="412" y="352" width="16" height="52" rx="3" fill="#6A4018"/>
+    <rect x="768" y="352" width="16" height="52" rx="3" fill="#6A4018"/>
+    <!-- Desk items: open notebook, pencil -->
+    <polygon points="494,280 660,280 666,288 488,288" fill="white" opacity=".9"/>
+    <polygon points="488,288 666,288 672,298 494,298" fill="#ECF0F1" opacity=".75"/>
+    <line x1="500" y1="284" x2="658" y2="284" stroke="#BDC3C7" stroke-width="1"/>
+    <rect x="700" y="276" width="8" height="38" rx="4" fill="#F39C12" opacity=".9"/>
+    <!-- More desks behind (angled perspective) -->
+    <polygon points="320,252 562,252 576,264 308,264" fill="#9A7040" opacity=".82"/>
+    <polygon points="308,264 576,264 584,276 302,276" fill="#7A5020" opacity=".82"/>
+    <polygon points="340,230 544,230 556,240 330,240" fill="#9A7040" opacity=".62"/>
+    <!-- Right wall windows -->
+    <rect x="688" y="28" width="80" height="262" rx="4" fill="rgba(180,210,240,.48)"/>
+    <rect x="688" y="28" width="80" height="262" rx="4" fill="none" stroke="#8B6010" stroke-width="6"/>
+    <line x1="728" y1="28" x2="728" y2="290" stroke="#8B6010" stroke-width="4"/>
+    <line x1="688" y1="153" x2="768" y2="153" stroke="#8B6010" stroke-width="4"/>
+    <!-- Teacher podium near board -->
+    <polygon points="248,285 365,285 373,295 240,295" fill="#7A5020"/>
   </svg>
   <div class="slide-tag-top"><div class="tag blue">📖 课文1 <span class="tag-en">Text 1 · What's your name?</span></div></div>
-  <div class="dl-stage">
-    <div class="char-wrap" id="s12-L"><div class="char-ring"></div>
-      <svg viewBox="0 0 100 165" class="char-svg"><use href="#c-yifei"/></svg>
-      <div class="char-label">王一飞</div></div>
-    <div class="dl-center">
-      <div class="dl-bubble" id="s12-bubble">
-        <div class="spk" id="s12-spk"></div><div class="bpy" id="s12-py"></div>
-        <div class="bzh" id="s12-zh">点击开始对话</div>
-        <div class="ben" id="s12-en">Click anywhere to start</div>
-      </div>
+  <div class="dl-bar" id="s12-bar">
+    <div class="dl-portrait-ring"><svg viewBox="0 0 80 80" class="dl-portrait-svg" xmlns="http://www.w3.org/2000/svg"><use id="s12-portrait-use" href="#p-yifei"/></svg></div>
+    <div class="dl-text-col">
+      <div class="dl-name" id="s12-name">点击开始对话</div>
+      <div class="dl-py" id="s12-py"></div>
+      <div class="dl-zh" id="s12-zh">Click anywhere to start</div>
+      <div class="dl-en" id="s12-en"></div>
+    </div>
+    <div class="dl-status-col">
       <div class="dl-progress" id="s12-prog"></div>
       <div class="dl-hint" id="s12-hint">👆 点击开始</div>
     </div>
-    <div class="char-wrap" id="s12-R"><div class="char-ring"></div>
-      <svg viewBox="0 0 100 165" class="char-svg"><use href="#c-chen"/></svg>
-      <div class="char-label">陈天中</div></div>
   </div>
 </div>
 
-<!-- 13. TEXT 2-2: CAMPUS, Chen + Bai -->
+<!-- 13. TEXT 2-2: CAMPUS PATH (daytime, blue sky) -->
 <div class="slide dl-slide" id="slide-13" onclick="advanceDl(13)">
   <svg class="scene-bg" viewBox="0 0 800 420" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-    <defs><linearGradient id="sky13" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#87CEEB"/><stop offset="100%" stop-color="#B8E4F0"/></linearGradient></defs>
-    <rect width="800" height="420" fill="url(#sky13)"/>
-    <rect y="280" width="800" height="140" fill="#5D8A3C"/>
-    <rect y="310" width="800" height="110" fill="#4A7030"/>
-    <rect x="300" y="278" width="200" height="22" rx="3" fill="#9E9E9E"/>
-    <ellipse cx="600" cy="68" rx="42" ry="26" fill="white" opacity=".8"/>
-    <ellipse cx="636" cy="56" rx="32" ry="22" fill="white" opacity=".8"/>
-    <ellipse cx="160" cy="82" rx="36" ry="22" fill="white" opacity=".7"/>
-    <rect x="538" y="138" width="185" height="152" rx="4" fill="#90A4AE"/>
-    <rect x="553" y="152" width="28" height="32" rx="2" fill="#B3E5FC"/>
-    <rect x="591" y="152" width="28" height="32" rx="2" fill="#B3E5FC"/>
-    <rect x="629" y="152" width="28" height="32" rx="2" fill="#B3E5FC"/>
-    <rect x="553" y="196" width="28" height="32" rx="2" fill="#B3E5FC"/>
-    <rect x="591" y="196" width="28" height="32" rx="2" fill="#B3E5FC"/>
-    <rect x="629" y="196" width="28" height="32" rx="2" fill="#B3E5FC"/>
-    <rect x="614" y="258" width="32" height="32" rx="2" fill="#6D4C41"/>
-    <rect x="80" y="196" width="12" height="84" fill="#5D4037"/><circle cx="86" cy="180" r="36" fill="#2E7D32"/>
-    <rect x="200" y="218" width="12" height="62" fill="#5D4037"/><circle cx="206" cy="204" r="28" fill="#388E3C"/>
-    <rect x="400" y="208" width="10" height="72" fill="#5D4037"/><circle cx="405" cy="193" r="30" fill="#2E7D32"/>
+    <defs>
+      <linearGradient id="g13s" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#5EB8F0"/><stop offset="40%" stop-color="#82CCF5"/><stop offset="100%" stop-color="#B0E0FF"/></linearGradient>
+      <linearGradient id="g13g" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#5C9C3C"/><stop offset="100%" stop-color="#4A8028"/></linearGradient>
+    </defs>
+    <rect width="800" height="420" fill="url(#g13s)"/>
+    <!-- Clouds -->
+    <ellipse cx="142" cy="65" rx="58" ry="30" fill="white" opacity=".9"/>
+    <ellipse cx="180" cy="52" rx="44" ry="28" fill="white" opacity=".85"/>
+    <ellipse cx="112" cy="78" rx="30" ry="18" fill="white" opacity=".8"/>
+    <ellipse cx="500" cy="78" rx="50" ry="26" fill="white" opacity=".88"/>
+    <ellipse cx="540" cy="64" rx="38" ry="24" fill="white" opacity=".82"/>
+    <ellipse cx="462" cy="88" rx="28" ry="16" fill="white" opacity=".75"/>
+    <ellipse cx="682" cy="52" rx="34" ry="18" fill="white" opacity=".7"/>
+    <!-- Ground -->
+    <rect y="258" width="800" height="162" fill="url(#g13g)"/>
+    <!-- Darker grass strip -->
+    <rect y="310" width="800" height="110" fill="#4A8028"/>
+    <!-- Campus path (perspective) -->
+    <polygon points="282,258 518,258 642,420 158,420" fill="#B0A080"/>
+    <line x1="282" y1="258" x2="158" y2="420" stroke="#9A8860" stroke-width="1.5"/>
+    <line x1="518" y1="258" x2="642" y2="420" stroke="#9A8860" stroke-width="1.5"/>
+    <line x1="400" y1="258" x2="400" y2="420" stroke="rgba(255,255,255,.35)" stroke-width="2" stroke-dasharray="12,8"/>
+    <!-- Left trees -->
+    <rect x="56" y="160" width="16" height="100" fill="#5D4037"/>
+    <ellipse cx="64" cy="146" rx="44" ry="50" fill="#2E7D32"/>
+    <ellipse cx="50" cy="163" rx="26" ry="32" fill="#388E3C"/>
+    <rect x="148" y="190" width="14" height="72" fill="#5D4037"/>
+    <ellipse cx="155" cy="178" rx="38" ry="44" fill="#2E7D32"/>
+    <ellipse cx="144" cy="194" rx="22" ry="28" fill="#388E3C"/>
+    <!-- Right trees -->
+    <rect x="728" y="166" width="16" height="94" fill="#5D4037"/>
+    <ellipse cx="736" cy="152" rx="42" ry="48" fill="#2E7D32"/>
+    <ellipse cx="748" cy="168" rx="24" ry="30" fill="#388E3C"/>
+    <rect x="636" y="194" width="14" height="68" fill="#5D4037"/>
+    <ellipse cx="643" cy="182" rx="34" ry="40" fill="#2E7D32"/>
+    <!-- Academic building (right) -->
+    <rect x="548" y="98" width="222" height="164" rx="4" fill="#9EB0B8"/>
+    <rect x="556" y="106" width="206" height="148" rx="2" fill="#A8B8C0"/>
+    <rect x="564" y="116" width="26" height="24" rx="2" fill="#B3D8F0" opacity=".82"/>
+    <rect x="598" y="116" width="26" height="24" rx="2" fill="#B3D8F0" opacity=".82"/>
+    <rect x="632" y="116" width="26" height="24" rx="2" fill="#B3D8F0" opacity=".82"/>
+    <rect x="666" y="116" width="26" height="24" rx="2" fill="#B3D8F0" opacity=".82"/>
+    <rect x="700" y="116" width="26" height="24" rx="2" fill="#B3D8F0" opacity=".82"/>
+    <rect x="734" y="116" width="26" height="24" rx="2" fill="#B3D8F0" opacity=".82"/>
+    <rect x="564" y="150" width="26" height="24" rx="2" fill="#B3D8F0" opacity=".82"/>
+    <rect x="598" y="150" width="26" height="24" rx="2" fill="#B3D8F0" opacity=".82"/>
+    <rect x="632" y="150" width="26" height="24" rx="2" fill="#B3D8F0" opacity=".82"/>
+    <rect x="666" y="150" width="26" height="24" rx="2" fill="#B3D8F0" opacity=".82"/>
+    <rect x="700" y="150" width="26" height="24" rx="2" fill="#B3D8F0" opacity=".82"/>
+    <rect x="734" y="150" width="26" height="24" rx="2" fill="#B3D8F0" opacity=".82"/>
+    <rect x="564" y="184" width="26" height="24" rx="2" fill="#B3D8F0" opacity=".82"/>
+    <rect x="598" y="184" width="26" height="24" rx="2" fill="#B3D8F0" opacity=".82"/>
+    <rect x="632" y="184" width="26" height="24" rx="2" fill="#B3D8F0" opacity=".82"/>
+    <rect x="666" y="184" width="26" height="24" rx="2" fill="#B3D8F0" opacity=".82"/>
+    <rect x="700" y="184" width="26" height="24" rx="2" fill="#B3D8F0" opacity=".82"/>
+    <rect x="734" y="184" width="26" height="24" rx="2" fill="#B3D8F0" opacity=".82"/>
+    <rect x="634" y="226" width="48" height="36" rx="2" fill="#607080"/>
+    <rect x="640" y="230" width="16" height="32" rx="1" fill="#506878"/>
+    <rect x="660" y="230" width="16" height="32" rx="1" fill="#506878"/>
+    <rect x="548" y="94" width="222" height="8" rx="2" fill="#7A8E96"/>
   </svg>
-  <div class="slide-tag-top"><div class="tag blue">📖 课文2 <span class="tag-en">Text 2 · Mistaken identity — campus</span></div></div>
-  <div class="dl-stage">
-    <div class="char-wrap" id="s13-L"><div class="char-ring"></div>
-      <svg viewBox="0 0 100 165" class="char-svg"><use href="#c-chen"/></svg>
-      <div class="char-label">陈天中</div></div>
-    <div class="dl-center">
-      <div class="dl-bubble" id="s13-bubble">
-        <div class="spk" id="s13-spk"></div><div class="bpy" id="s13-py"></div>
-        <div class="bzh" id="s13-zh">点击开始对话</div>
-        <div class="ben" id="s13-en">Click anywhere to start</div>
-      </div>
+  <div class="slide-tag-top"><div class="tag blue">📖 课文2 <span class="tag-en">Text 2 · Mistaken identity — campus path</span></div></div>
+  <div class="dl-bar" id="s13-bar">
+    <div class="dl-portrait-ring"><svg viewBox="0 0 80 80" class="dl-portrait-svg" xmlns="http://www.w3.org/2000/svg"><use id="s13-portrait-use" href="#p-chen"/></svg></div>
+    <div class="dl-text-col">
+      <div class="dl-name" id="s13-name">点击开始对话</div>
+      <div class="dl-py" id="s13-py"></div>
+      <div class="dl-zh" id="s13-zh">Click anywhere to start</div>
+      <div class="dl-en" id="s13-en"></div>
+    </div>
+    <div class="dl-status-col">
       <div class="dl-progress" id="s13-prog"></div>
       <div class="dl-hint" id="s13-hint">👆 点击开始</div>
     </div>
-    <div class="char-wrap" id="s13-R"><div class="char-ring"></div>
-      <svg viewBox="0 0 100 165" class="char-svg"><use href="#c-bai"/></svg>
-      <div class="char-label">白家月</div></div>
   </div>
 </div>
 
-<!-- 14. TEXT 2-3: CAMPUS (sunset), Li + Bai -->
+<!-- 14. TEXT 2-3: CAMPUS PLAZA (sunset / golden hour) -->
 <div class="slide dl-slide" id="slide-14" onclick="advanceDl(14)">
   <svg class="scene-bg" viewBox="0 0 800 420" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-    <defs><linearGradient id="sky14" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FDE8B0"/><stop offset="100%" stop-color="#F8C060"/></linearGradient></defs>
-    <rect width="800" height="420" fill="url(#sky14)"/>
-    <rect y="280" width="800" height="140" fill="#5D8A3C"/>
-    <rect y="310" width="800" height="110" fill="#4A7030"/>
-    <rect x="300" y="278" width="200" height="22" rx="3" fill="#9E9E9E"/>
-    <ellipse cx="700" cy="58" rx="52" ry="32" fill="#FDD890" opacity=".9"/>
-    <ellipse cx="712" cy="52" rx="34" ry="30" fill="#FFC107" opacity=".65"/>
-    <rect x="518" y="138" width="205" height="152" rx="4" fill="#8D6E63"/>
-    <rect x="534" y="152" width="32" height="36" rx="2" fill="#FFECB3"/>
-    <rect x="578" y="152" width="32" height="36" rx="2" fill="#FFECB3"/>
-    <rect x="622" y="152" width="32" height="36" rx="2" fill="#FFECB3"/>
-    <rect x="534" y="200" width="32" height="36" rx="2" fill="#FFECB3"/>
-    <rect x="578" y="200" width="32" height="36" rx="2" fill="#FFECB3"/>
-    <rect x="622" y="200" width="32" height="36" rx="2" fill="#FFECB3"/>
-    <rect x="604" y="258" width="38" height="32" rx="2" fill="#5D4037"/>
-    <rect x="58" y="178" width="14" height="102" fill="#5D4037"/><circle cx="65" cy="160" r="40" fill="#2E7D32"/>
-    <rect x="220" y="208" width="12" height="72" fill="#5D4037"/><circle cx="226" cy="193" r="30" fill="#388E3C"/>
-    <rect x="388" y="198" width="12" height="82" fill="#5D4037"/><circle cx="394" cy="181" r="34" fill="#2E7D32"/>
+    <defs>
+      <linearGradient id="g14s" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FF8C42"/><stop offset="50%" stop-color="#FFBD59"/><stop offset="100%" stop-color="#FFD880"/></linearGradient>
+      <linearGradient id="g14g" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#3A5C28"/><stop offset="100%" stop-color="#2A4818"/></linearGradient>
+    </defs>
+    <rect width="800" height="420" fill="url(#g14s)"/>
+    <!-- Sun disk -->
+    <circle cx="400" cy="244" r="38" fill="#FFE040" opacity=".85"/>
+    <circle cx="400" cy="244" r="28" fill="#FFF080" opacity=".7"/>
+    <circle cx="400" cy="244" r="60" fill="rgba(255,220,40,.2)"/>
+    <!-- Horizon haze -->
+    <rect x="0" y="238" width="800" height="12" fill="rgba(255,180,50,.35)"/>
+    <!-- Ground/plaza -->
+    <rect x="0" y="248" width="800" height="172" fill="url(#g14g)"/>
+    <!-- Plaza stone path -->
+    <polygon points="238,248 562,248 682,420 118,420" fill="#8A7048" opacity=".7"/>
+    <!-- Plaza steps -->
+    <rect x="298" y="248" width="204" height="14" rx="2" fill="#9A8058"/>
+    <rect x="308" y="262" width="184" height="12" rx="2" fill="#908050"/>
+    <rect x="318" y="274" width="164" height="10" rx="2" fill="#887848"/>
+    <!-- Shadows from trees -->
+    <polygon points="82,248 142,248 202,420 22,420" fill="rgba(0,0,0,.18)"/>
+    <polygon points="622,248 682,248 762,420 602,420" fill="rgba(0,0,0,.18)"/>
+    <!-- Left silhouetted trees (dark against sunset) -->
+    <rect x="44" y="146" width="18" height="104" fill="#1A3010"/>
+    <ellipse cx="53" cy="130" rx="48" ry="56" fill="#1E3812"/>
+    <ellipse cx="38" cy="150" rx="28" ry="36" fill="#1A3010"/>
+    <rect x="152" y="176" width="14" height="74" fill="#1A3010"/>
+    <ellipse cx="159" cy="162" rx="36" ry="44" fill="#1E3812"/>
+    <!-- Right silhouetted trees -->
+    <rect x="738" y="150" width="18" height="100" fill="#1A3010"/>
+    <ellipse cx="747" cy="134" rx="46" ry="54" fill="#1E3812"/>
+    <ellipse cx="762" cy="154" rx="26" ry="34" fill="#1A3010"/>
+    <rect x="628" y="178" width="14" height="72" fill="#1A3010"/>
+    <ellipse cx="635" cy="164" rx="34" ry="42" fill="#1E3812"/>
+    <!-- Academic building (same campus, warm lit windows) -->
+    <rect x="510" y="92" width="232" height="160" rx="4" fill="#8B7060"/>
+    <rect x="518" y="100" width="216" height="144" rx="2" fill="#9A7C68"/>
+    <rect x="526" y="110" width="26" height="22" rx="2" fill="#FFE082" opacity=".9"/>
+    <rect x="560" y="110" width="26" height="22" rx="2" fill="#FFE082" opacity=".9"/>
+    <rect x="594" y="110" width="26" height="22" rx="2" fill="#FFE082" opacity=".9"/>
+    <rect x="628" y="110" width="26" height="22" rx="2" fill="#FFD740" opacity=".85"/>
+    <rect x="662" y="110" width="26" height="22" rx="2" fill="#FFE082" opacity=".9"/>
+    <rect x="696" y="110" width="26" height="22" rx="2" fill="#FFE082" opacity=".9"/>
+    <rect x="526" y="142" width="26" height="22" rx="2" fill="#FFE082" opacity=".9"/>
+    <rect x="560" y="142" width="26" height="22" rx="2" fill="#FFD740" opacity=".85"/>
+    <rect x="594" y="142" width="26" height="22" rx="2" fill="#FFE082" opacity=".9"/>
+    <rect x="628" y="142" width="26" height="22" rx="2" fill="#FFE082" opacity=".9"/>
+    <rect x="662" y="142" width="26" height="22" rx="2" fill="#FFE082" opacity=".9"/>
+    <rect x="696" y="142" width="26" height="22" rx="2" fill="#FFD740" opacity=".85"/>
+    <rect x="526" y="174" width="26" height="22" rx="2" fill="#FFE082" opacity=".8"/>
+    <rect x="560" y="174" width="26" height="22" rx="2" fill="#FFE082" opacity=".8"/>
+    <rect x="594" y="174" width="26" height="22" rx="2" fill="#FFD740" opacity=".8"/>
+    <rect x="628" y="174" width="26" height="22" rx="2" fill="#FFE082" opacity=".8"/>
+    <rect x="662" y="174" width="26" height="22" rx="2" fill="#FFE082" opacity=".8"/>
+    <rect x="696" y="174" width="26" height="22" rx="2" fill="#FFE082" opacity=".8"/>
+    <rect x="598" y="218" width="52" height="34" rx="2" fill="#5C4030"/>
+    <rect x="604" y="222" width="18" height="30" rx="1" fill="#4A3020"/>
+    <rect x="626" y="222" width="18" height="30" rx="1" fill="#4A3020"/>
+    <rect x="510" y="88" width="232" height="8" rx="2" fill="#6A5040"/>
+    <!-- Building long shadow -->
+    <polygon points="510,252 742,252 800,318 448,318" fill="rgba(0,0,0,.12)"/>
   </svg>
-  <div class="slide-tag-top"><div class="tag blue">📖 课文3 <span class="tag-en">Text 3 · Nice to meet you — campus</span></div></div>
-  <div class="dl-stage">
-    <div class="char-wrap" id="s14-L"><div class="char-ring"></div>
-      <svg viewBox="0 0 100 165" class="char-svg"><use href="#c-liwen"/></svg>
-      <div class="char-label">李文</div></div>
-    <div class="dl-center">
-      <div class="dl-bubble" id="s14-bubble">
-        <div class="spk" id="s14-spk"></div><div class="bpy" id="s14-py"></div>
-        <div class="bzh" id="s14-zh">点击开始对话</div>
-        <div class="ben" id="s14-en">Click anywhere to start</div>
-      </div>
+  <div class="slide-tag-top"><div class="tag blue">📖 课文3 <span class="tag-en">Text 3 · Nice to meet you — campus plaza</span></div></div>
+  <div class="dl-bar" id="s14-bar">
+    <div class="dl-portrait-ring"><svg viewBox="0 0 80 80" class="dl-portrait-svg" xmlns="http://www.w3.org/2000/svg"><use id="s14-portrait-use" href="#p-liwen"/></svg></div>
+    <div class="dl-text-col">
+      <div class="dl-name" id="s14-name">点击开始对话</div>
+      <div class="dl-py" id="s14-py"></div>
+      <div class="dl-zh" id="s14-zh">Click anywhere to start</div>
+      <div class="dl-en" id="s14-en"></div>
+    </div>
+    <div class="dl-status-col">
       <div class="dl-progress" id="s14-prog"></div>
       <div class="dl-hint" id="s14-hint">👆 点击开始</div>
     </div>
-    <div class="char-wrap" id="s14-R"><div class="char-ring"></div>
-      <svg viewBox="0 0 100 165" class="char-svg"><use href="#c-bai"/></svg>
-      <div class="char-label">白家月</div></div>
   </div>
 </div>
 
@@ -923,56 +1276,46 @@ const DIALOGUES = {
 };
 
 const dlState = {};
+const PORTRAIT_MAP = {
+  '王一飞':'p-yifei','王一飞 Wáng Yīfēi':'p-yifei',
+  '小语':'p-xiaoyu','小语 Xiǎoyǔ':'p-xiaoyu',
+  '陈天中':'p-chen','陈天中 Chén Tiānzhōng':'p-chen',
+  '白家月':'p-bai','白家月 Bái Jiāyuè':'p-bai',
+  '李文':'p-liwen','李文 Lǐ Wén':'p-liwen',
+  '学生们':'p-students'
+};
+function getPortrait(name){return PORTRAIT_MAP[name]||'p-students';}
 
-function initDl(id) {
-  dlState[id] = -1;
-  const lEl = document.getElementById('s'+id+'-L');
-  const rEl = document.getElementById('s'+id+'-R');
-  if (lEl) lEl.classList.remove('speaking','dimmed');
-  if (rEl) rEl.classList.remove('speaking','dimmed');
-  const bubble = document.getElementById('s'+id+'-bubble');
-  if (bubble) {
-    bubble.querySelector('.spk').textContent = '';
-    bubble.querySelector('.bpy').textContent = '';
-    bubble.querySelector('.bzh').textContent = '点击开始对话';
-    bubble.querySelector('.ben').textContent = 'Click anywhere to start dialogue';
-  }
-  const prog = document.getElementById('s'+id+'-prog');
-  if (prog) {
-    prog.innerHTML = '';
-    DIALOGUES[id].forEach(() => { const d=document.createElement('div'); d.className='dl-dot'; prog.appendChild(d); });
-  }
-  const hint = document.getElementById('s'+id+'-hint');
-  if (hint) hint.textContent = '👆 点击开始 Click to start';
+function initDl(id){
+  dlState[id]=-1;
+  const lines=DIALOGUES[id];
+  const u=document.getElementById('s'+id+'-portrait-use');
+  if(u&&lines&&lines.length)u.setAttribute('href','#'+getPortrait(lines[0].name));
+  const n=document.getElementById('s'+id+'-name'); if(n)n.textContent='点击开始对话';
+  const py=document.getElementById('s'+id+'-py'); if(py)py.textContent='';
+  const zh=document.getElementById('s'+id+'-zh'); if(zh)zh.textContent='Click anywhere to start';
+  const en=document.getElementById('s'+id+'-en'); if(en)en.textContent='';
+  const prog=document.getElementById('s'+id+'-prog');
+  if(prog){prog.innerHTML='';if(lines)lines.forEach(()=>{const d=document.createElement('div');d.className='dl-dot';prog.appendChild(d);});}
+  const hint=document.getElementById('s'+id+'-hint'); if(hint)hint.textContent='👆 点击开始';
 }
 
-function advanceDl(id) {
-  const lines = DIALOGUES[id]; if (!lines) return;
-  const next = (dlState[id] ?? -1) + 1;
-  if (next >= lines.length) return;
-  dlState[id] = next;
-  const line = lines[next];
-  const bubble = document.getElementById('s'+id+'-bubble');
-  bubble.querySelector('.spk').textContent = line.name;
-  bubble.querySelector('.bpy').textContent = line.py;
-  bubble.querySelector('.bzh').innerHTML = line.zh;
-  bubble.querySelector('.ben').textContent = line.en;
-  bubble.style.animation = 'none'; bubble.offsetHeight;
-  bubble.style.animation = 'bubbleIn .3s ease';
-  const lEl = document.getElementById('s'+id+'-L');
-  const rEl = document.getElementById('s'+id+'-R');
-  if (line.side === 'L') {
-    lEl.classList.add('speaking'); lEl.classList.remove('dimmed');
-    rEl.classList.remove('speaking'); rEl.classList.add('dimmed');
-  } else if (line.side === 'R') {
-    rEl.classList.add('speaking'); rEl.classList.remove('dimmed');
-    lEl.classList.remove('speaking'); lEl.classList.add('dimmed');
-  } else {
-    lEl.classList.remove('speaking','dimmed'); rEl.classList.remove('speaking','dimmed');
-  }
-  document.querySelectorAll('#s'+id+'-prog .dl-dot').forEach((d,i) => d.classList.toggle('done', i <= next));
-  const hint = document.getElementById('s'+id+'-hint');
-  hint.textContent = next >= lines.length - 1 ? '对话结束 · 按 → 继续' : '点击继续 Click to advance ›';
+function advanceDl(id){
+  const lines=DIALOGUES[id]; if(!lines)return;
+  const next=(dlState[id]??-1)+1;
+  if(next>=lines.length)return;
+  dlState[id]=next;
+  const line=lines[next];
+  const u=document.getElementById('s'+id+'-portrait-use');
+  if(u)u.setAttribute('href','#'+getPortrait(line.name));
+  const n=document.getElementById('s'+id+'-name'); if(n)n.textContent=line.name;
+  const py=document.getElementById('s'+id+'-py'); if(py)py.textContent=line.py;
+  const zh=document.getElementById('s'+id+'-zh');
+  if(zh){zh.innerHTML=line.zh;zh.style.animation='none';zh.offsetHeight;zh.style.animation='bubbleIn .3s ease';}
+  const en=document.getElementById('s'+id+'-en'); if(en)en.textContent=line.en;
+  document.querySelectorAll('#s'+id+'-prog .dl-dot').forEach((d,i)=>d.classList.toggle('done',i<=next));
+  const hint=document.getElementById('s'+id+'-hint');
+  if(hint)hint.textContent=next>=lines.length-1?'对话结束 · 按 → 继续':'点击继续 ›';
 }
 
 // ── Quiz ──
